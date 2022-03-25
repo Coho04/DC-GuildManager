@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>_de._coho04_</groupId>
-    <artifactId>DiscordControllBot</artifactId>
+    <groupId>_de.golden-developer</groupId>
+    <artifactId>GDGuildManager</artifactId>
     <version>1.0</version>
 
     <build>
@@ -64,7 +64,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>de._Coho04_.DiscordBot.Main</mainClass>
+                            <mainClass>de.goldendeveloper.gdguildmanager.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -103,7 +103,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>5.0.0-alpha.4</version>
+            <version>5.0.0-alpha.9</version>
         </dependency>
     </dependencies>
 </project>
