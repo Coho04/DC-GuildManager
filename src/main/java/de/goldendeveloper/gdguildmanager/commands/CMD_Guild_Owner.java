@@ -4,11 +4,11 @@ import de.goldendeveloper.gdguildmanager.ID;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class CMD_Guild_Owner {
 
-    public static void onGuildOwner(SlashCommandEvent e) {
+    public static void onGuildOwner(SlashCommandInteractionEvent e) {
         Guild g = e.getGuild();
         if (g != null) {
             if (g.getOwner() != null) {

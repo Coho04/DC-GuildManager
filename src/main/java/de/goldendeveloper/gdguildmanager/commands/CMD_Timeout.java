@@ -3,13 +3,13 @@ package de.goldendeveloper.gdguildmanager.commands;
 import de.goldendeveloper.gdguildmanager.ID;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 import java.util.concurrent.TimeUnit;
 
 public class CMD_Timeout {
 
-    public static void onTimeout(SlashCommandEvent e) {
+    public static void onTimeout(SlashCommandInteractionEvent e) {
         Member m = e.getMember();
         if (m != null) {
             if (m.hasPermission(Permission.ADMINISTRATOR)) {
@@ -18,7 +18,7 @@ public class CMD_Timeout {
                 if (member != null) {
                     if (time >= 0) {
                         member.timeoutFor(time, TimeUnit.MINUTES).queue();
-                        e.getInteraction().reply("Der User " + member.getUser().getName() + " wurde erfolgreich getimeoutet!").queue();
+                        e.getInteraction().reply("Der User " + member.getUser().getName() + " wurde erfolgreich getimeout!").queue();
                     } else {
                         e.getInteraction().reply(ID.hasError("Timeout Dauer is 0")).queue();
                     }

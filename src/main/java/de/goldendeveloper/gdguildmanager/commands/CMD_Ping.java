@@ -1,10 +1,11 @@
 package de.goldendeveloper.gdguildmanager.commands;
 
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class CMD_Ping {
 
-    public static void onPing(SlashCommandEvent e) {
+    public static void onPing(SlashCommandInteractionEvent e) {
         long time = System.currentTimeMillis();
         e.getInteraction().reply("Pong!").queue(response -> response.sendMessage("Pong:" + System.currentTimeMillis() + time + " ms").queue());
     }

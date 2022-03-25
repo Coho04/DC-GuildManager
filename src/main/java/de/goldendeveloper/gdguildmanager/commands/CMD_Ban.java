@@ -3,27 +3,27 @@ package de.goldendeveloper.gdguildmanager.commands;
 import de.goldendeveloper.gdguildmanager.ID;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class CMD_Ban {
 
-    public static void onBanCommand(SlashCommandEvent e) {
+    public static void onBanCommand(SlashCommandInteractionEvent e) {
         Member m = e.getMember();
         if (m != null) {
             if (m.hasPermission(Permission.BAN_MEMBERS) || m.hasPermission(Permission.ADMINISTRATOR)) {
                 Member member = e.getOption("user").getAsMember();
                 if (e.getOption("time") != null) {
-                    Long time = e.getOption("time").getAsLong();
+                    long time = e.getOption("time").getAsLong();
                     String reason = "";
                     if (e.getOption("reason") != null) {
                         reason = e.getOption("reason").getAsString();
                     }
                     if (member != null) {
                         if (!reason.isEmpty()) {
-                            member.ban(time.intValue(), reason).queue();
+                            member.ban((int) time, reason).queue();
                             e.getInteraction().reply("Der User " + member.getUser().getName() + " wurde erfolgreich gebannt!").queue();
                         } else {
-                            member.ban(time.intValue()).queue();
+                            member.ban((int) time).queue();
                             e.getInteraction().reply("Der User " + member.getUser().getName() + " wurde erfolgreich gebannt!").queue();
                         }
                     } else {

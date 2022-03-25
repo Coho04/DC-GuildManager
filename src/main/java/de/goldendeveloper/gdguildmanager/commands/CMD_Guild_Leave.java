@@ -4,11 +4,11 @@ import de.goldendeveloper.gdguildmanager.ID;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class CMD_Guild_Leave {
 
-    public static void onLeaveGuild(SlashCommandEvent e) {
+    public static void onLeaveGuild(SlashCommandInteractionEvent e) {
         Member m = e.getMember();
         if (m != null) {
             if (m.hasPermission(Permission.ADMINISTRATOR)) {

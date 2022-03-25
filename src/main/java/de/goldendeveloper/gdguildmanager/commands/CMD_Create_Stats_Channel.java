@@ -1,9 +1,9 @@
 package de.goldendeveloper.gdguildmanager.commands;
 
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class CMD_Create_Stats_Channel {
 
-    public static void onCreateStatsChannel(SlashCommandEvent e) {
+    public static void onCreateStatsChannel(SlashCommandInteractionEvent e) {
     }
 }

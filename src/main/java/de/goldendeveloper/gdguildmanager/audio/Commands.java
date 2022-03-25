@@ -17,7 +17,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.*;
@@ -41,7 +41,7 @@ public class Commands {
     private static final String QUEUE_INFO = "Info about the Queue: (Size - %d)";
     private static final String ERROR = "Error while loading \"%s\"";
 
-    public static void onSkip(SlashCommandEvent e) {
+    public static void onSkip(SlashCommandInteractionEvent e) {
         if (isIdle(e.getChannel(), e.getGuild())) return;
 
         if (isCurrentDj(e.getMember())) {
@@ -49,12 +49,12 @@ public class Commands {
         }
     }
 
-    public static void onReset(SlashCommandEvent e) {
+    public static void onReset(SlashCommandInteractionEvent e) {
         e.getInteraction().reply("You don't have the required permissions to do that! [DJ role]").queue();
 
     }
 
-    public static void onShuffle(SlashCommandEvent e) {
+    public static void onShuffle(SlashCommandInteractionEvent e) {
         if (isIdle(e.getChannel(), e.getGuild())) return;
         getTrackManager(e.getGuild()).shuffleQueue();
         e.getInteraction().reply("\u2705 Shuffled the queue!").queue();
@@ -68,12 +68,12 @@ public class Commands {
         return false;
     }
 
-    public static void onForceSkip(SlashCommandEvent e) {
+    public static void onForceSkip(SlashCommandInteractionEvent e) {
         if (isIdle(e.getChannel(), e.getGuild())) return;
         forceSkipTrack(e.getGuild(), e.getChannel());
     }
 
-    public static void onQueue(SlashCommandEvent e) {
+    public static void onQueue(SlashCommandInteractionEvent e) {
         if (!hasPlayer(e.getGuild()) || getTrackManager(e.getGuild()).getQueuedTracks().isEmpty()) {
             e.getInteraction().reply("The queue is empty! Load a song with ** /play <Song> **!").queue();
         } else {
@@ -85,7 +85,7 @@ public class Commands {
         }
     }
 
-    public static void onInfo(SlashCommandEvent e) {
+    public static void onInfo(SlashCommandInteractionEvent e) {
         if (!hasPlayer(e.getGuild()) || getPlayer(e.getGuild()).getPlayingTrack() == null) { // No song is playing
             e.reply("No song is being played at the moment! *It's your time to shine..*").queue();
         } else {
@@ -114,7 +114,7 @@ public class Commands {
 
     public void executeCommand(String[] args, MessageReceivedEvent e, MessageChannel chat) {
         switch (args.length) {
-            case 0: // Show help message
+            case 0:
                 break;
             case 1:
                 switch (args[0].toLowerCase()) {
@@ -130,7 +130,6 @@ public class Commands {
                 switch (args[0].toLowerCase()) {
                     case "ytplay": // Query YouTube for a music video
                         input = "ytsearch: " + input;
-                        // no break;
                     case "play": // Play a track
                         if (args.length <= 1) {
                             chat.sendMessage("Please include a valid source.").queue();

@@ -4,11 +4,11 @@ import de.goldendeveloper.gdguildmanager.ID;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class CMD_Channel_Leave {
 
-    public static void onLeaveChannel(SlashCommandEvent e) {
+    public static void onLeaveChannel(SlashCommandInteractionEvent e) {
         Member m = e.getMember();
         if (m != null) {
             Guild g = e.getGuild();

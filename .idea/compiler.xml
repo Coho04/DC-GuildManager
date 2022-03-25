@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="_Coho04_DiscordBot" />
         <module name="DiscordControllBot" />
+        <module name="GDGuildManager" />
       </profile>
     </annotationProcessing>
   </component>

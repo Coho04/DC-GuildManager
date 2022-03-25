@@ -4,11 +4,11 @@ import de.goldendeveloper.gdguildmanager.ID;
 import de.goldendeveloper.gdguildmanager.Main;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class CMD_BOT_Activity {
 
-    public static void onActivity(SlashCommandEvent e) {
+    public static void onActivity(SlashCommandInteractionEvent e) {
         User u = e.getJDA().getUserById(ID._Coho04_MEMBER);
         String acv = e.getOption("activity").getAsString();
         String url = e.getOption("url").getAsString();
@@ -16,24 +16,24 @@ public class CMD_BOT_Activity {
         if (u != null) {
             if (e.getUser() == u) {
                 if (!acv.isEmpty()) {
-                    if (Main.Bot.getShardManager() != null) {
+                    if (Main.getDiscord().getBot().getShardManager() != null) {
                         if (type.equalsIgnoreCase("playing")) {
-                            Main.Bot.getShardManager().setActivity(Activity.playing(acv));
+                            Main.getDiscord().getBot().getShardManager().setActivity(Activity.playing(acv));
                         } else if (type.equalsIgnoreCase("watching")) {
-                            Main.Bot.getShardManager().setActivity(Activity.watching(acv));
+                            Main.getDiscord().getBot().getShardManager().setActivity(Activity.watching(acv));
                         } else if (type.equalsIgnoreCase("competing")) {
-                            Main.Bot.getShardManager().setActivity(Activity.competing(acv));
+                            Main.getDiscord().getBot().getShardManager().setActivity(Activity.competing(acv));
                         } else if (type.equalsIgnoreCase("streaming")) {
                             if (!url.isEmpty()) {
-                                Main.Bot.getShardManager().setActivity(Activity.streaming(acv, url));
+                                Main.getDiscord().getBot().getShardManager().setActivity(Activity.streaming(acv, url));
                             } else {
                                 e.getInteraction().reply(ID.hasError("URL is Empty")).queue();
                             }
                         } else if (type.equalsIgnoreCase("listening")) {
-                            Main.Bot.getShardManager().setActivity(Activity.listening(acv));
+                            Main.getDiscord().getBot().getShardManager().setActivity(Activity.listening(acv));
                         } else if (type.equalsIgnoreCase("custom")) {
                             if (!url.isEmpty()) {
-                                Main.Bot.getShardManager().setActivity(Activity.of(Activity.ActivityType.CUSTOM_STATUS, acv, url));
+                                Main.getDiscord().getBot().getShardManager().setActivity(Activity.of(Activity.ActivityType.CUSTOM_STATUS, acv, url));
                             } else {
                                 e.getInteraction().reply(ID.hasError("URL is Empty")).queue();
                             }

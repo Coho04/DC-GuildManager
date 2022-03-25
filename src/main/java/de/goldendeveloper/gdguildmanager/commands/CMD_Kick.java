@@ -3,11 +3,11 @@ package de.goldendeveloper.gdguildmanager.commands;
 import de.goldendeveloper.gdguildmanager.ID;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class CMD_Kick {
 
-    public static void onKickCommand(SlashCommandEvent e) {
+    public static void onKickCommand(SlashCommandInteractionEvent e) {
         Member m = e.getMember();
         if (m != null) {
             if (m.hasPermission(Permission.KICK_MEMBERS) || m.hasPermission(Permission.ADMINISTRATOR)) {
