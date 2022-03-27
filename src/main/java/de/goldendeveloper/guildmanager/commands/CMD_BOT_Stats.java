@@ -17,7 +17,7 @@ public class CMD_BOT_Stats {
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("**Server Stats**");
-        embed.setFooter("@_Coho04_", e.getJDA().getSelfUser().getAvatarUrl());
+        embed.setFooter("@Golden-Developer", e.getJDA().getSelfUser().getAvatarUrl());
         embed.setColor(Color.MAGENTA);
         embed.addField("Server", String.valueOf(e.getJDA().getGuilds().size()), true);
         embed.addField("Main Server",MainServer.getName() , true);

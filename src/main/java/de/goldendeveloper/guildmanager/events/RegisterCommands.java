@@ -5,6 +5,7 @@ import de.goldendeveloper.guildmanager.commands.admin.CMD_BOT_Activity;
 import de.goldendeveloper.guildmanager.commands.admin.CMD_BOT_Stop;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 public class RegisterCommands extends ListenerAdapter {
 
@@ -56,7 +57,7 @@ public class RegisterCommands extends ListenerAdapter {
         } else if (cmd.equalsIgnoreCase(CMD_Birthday_s)) {
             CMD_Birthday.onBirthday(e);
         } else if (cmd.equalsIgnoreCase(CMD_Bot_Owner_s)) {
-            CMD_BOT_Owner.onBotOwner(e);
+            e.getInteraction().reply("Der Bot Owner ist die Organisation Golden-Developer").addActionRow(Button.link("https://discord.gg/", "Zum Server")).queue();
         } else if (cmd.equalsIgnoreCase(CMD_Help_s)) {
             CMD_Help.onHelp(e);
         } else if (cmd.equalsIgnoreCase(CMD_Stop_s)) {

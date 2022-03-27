@@ -6,15 +6,9 @@ import net.dv8tion.jda.api.entities.Member;
 
 public class ID {
 
-    public static String hasError(String error) {
-        return "[ERROR]: Es ist ein Fehler aufgetreten bitte melden den Grund mit /error-report \n" + "Fehler: " + error;
-    }
-
-
     public static String _Coho04_Community_Server = "817500165866782770";
     public static String _Coho04_MEMBER = "513306244371447828";
     public static String hasNoPermissions = "[ERROR]: Für den Command hast du nicht genügend Rechte";
-
 
     public static int getOnlineUsers(Guild guild) {
         int onlineMembers = 0;
@@ -54,5 +48,9 @@ public class ID {
             }
         }
         return OfflineMembers;
+    }
+
+    public static String hasError(String error) {
+        return "[ERROR]: Es ist ein Fehler aufgetreten bitte melden den Grund mit /error-report \n" + "Fehler: " + error;
     }
 }
