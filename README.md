@@ -1,1 +1,1 @@
-# _Coho04_DiscordBot
+# GD-GuildManager

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.golden-developer</groupId>
-    <artifactId>GDGuildManager</artifactId>
+    <artifactId>GuildManager</artifactId>
     <version>1.0</version>
 
     <build>
@@ -63,7 +63,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>de.goldendeveloper.gdguildmanager.Main</mainClass>
+                            <mainClass>de.goldendeveloper.guildmanager.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
