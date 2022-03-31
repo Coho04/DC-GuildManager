@@ -3,20 +3,25 @@ package de.goldendeveloper.guildmanager;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
+import de.goldendeveloper.guildmanager.events.Events;
 import de.goldendeveloper.guildmanager.events.RegisterCommands;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 public class Discord {
 
     public static JDA bot;
+    private final OffsetDateTime date = OffsetDateTime.now(ZoneOffset.of("+02:00"));
 
     public Discord(String BOT_TOKEN) {
         try {
@@ -32,7 +37,7 @@ public class Discord {
                             GatewayIntent.GUILD_MESSAGE_TYPING, GatewayIntent.GUILD_VOICE_STATES,
                             GatewayIntent.GUILD_WEBHOOKS, GatewayIntent.GUILD_MEMBERS,
                             GatewayIntent.GUILD_MESSAGE_TYPING)
-                    .addEventListeners(new RegisterCommands())
+                    .addEventListeners(new RegisterCommands(), new Events())
                     .setAutoReconnect(true)
                     .build().awaitReady();
             registerCommand();
@@ -43,7 +48,6 @@ public class Discord {
     }
 
     private void registerCommand() {
-        bot.upsertCommand(RegisterCommands.Leave, "Lässt den Bot den Server verlassen").queue();
         bot.upsertCommand(RegisterCommands.Server_Owner, "Nennt den Server Inhaber").queue();
         bot.upsertCommand(RegisterCommands.Join, "Der Bot sendet dir einen link um ihn einzuladen").queue();
         bot.upsertCommand(RegisterCommands.Invite, "Du wirst eingeladen auf unseren Discord").queue();
@@ -63,6 +67,12 @@ public class Discord {
         bot.upsertCommand(RegisterCommands.TimeOut, "Timeoutet einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.STRING, "time", "Gib die Timeout Dauer in Tagen an um den User zu timeouten. (In Minuten)", true).queue();
         bot.upsertCommand(RegisterCommands.CmdShutdown, "Stoppt den Discord Bot!").queue();
         bot.upsertCommand(RegisterCommands.CmdRestart, "Startet den Discord Bot neu!").queue();
+
+        bot.upsertCommand(RegisterCommands.settings, "Stelle den GuildManager ein!")
+                .addSubcommands(
+                        new SubcommandData(RegisterCommands.settingsSupJoinRole, "").addOption(OptionType.ROLE, RegisterCommands.settingsSupJoinRoleOptionRole, ""),
+                        new SubcommandData(RegisterCommands.settingsSupWMessage, "").addOption(OptionType.CHANNEL,RegisterCommands.settingsSupWMessage, "")
+                ).queue();
     }
 
     public void sendErrorMessage(String Error) {
@@ -85,5 +95,9 @@ public class Discord {
         embed.setColor(0x00FF00);
         embed.setFooter(new WebhookEmbed.EmbedFooter("@Golden-Developer", getBot().getSelfUser().getAvatarUrl()));
         new WebhookClientBuilder(Main.getConfig().getDiscordWebhook()).build().send(embed.build());
+    }
+
+    public OffsetDateTime getDate() {
+        return date;
     }
 }

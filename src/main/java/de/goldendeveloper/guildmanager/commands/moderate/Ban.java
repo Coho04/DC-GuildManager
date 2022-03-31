@@ -1,32 +1,37 @@
-package de.goldendeveloper.guildmanager.commands;
+package de.goldendeveloper.guildmanager.commands.moderate;
 
 import de.goldendeveloper.guildmanager.ID;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class Kick {
+public class Ban {
 
-    public Kick(SlashCommandInteractionEvent e) {
+    public Ban(SlashCommandInteractionEvent e) {
         Member m = e.getMember();
         if (m != null) {
-            if (m.hasPermission(Permission.KICK_MEMBERS) || m.hasPermission(Permission.ADMINISTRATOR)) {
+            if (m.hasPermission(Permission.BAN_MEMBERS) || m.hasPermission(Permission.ADMINISTRATOR)) {
                 Member member = e.getOption("user").getAsMember();
+                if (e.getOption("time") != null) {
+                    long time = e.getOption("time").getAsLong();
                     String reason = "";
                     if (e.getOption("reason") != null) {
                         reason = e.getOption("reason").getAsString();
                     }
                     if (member != null) {
                         if (!reason.isEmpty()) {
-                            member.kick(reason).queue();
-                            e.getInteraction().reply("Der User " + member.getUser().getName() + " wurde erfolgreich gekickt!").queue();
+                            member.ban((int) time, reason).queue();
+                            e.getInteraction().reply("Der User " + member.getUser().getName() + " wurde erfolgreich gebannt!").queue();
                         } else {
-                            member.kick().queue();
-                            e.getInteraction().reply("Der User " + member.getUser().getName() + " wurde erfolgreich gekickt!").queue();
+                            member.ban((int) time).queue();
+                            e.getInteraction().reply("Der User " + member.getUser().getName() + " wurde erfolgreich gebannt!").queue();
                         }
                     } else {
                         e.getInteraction().reply(ID.hasError("User ist NULL")).queue();
                     }
+                } else {
+                    e.getInteraction().reply(ID.hasError("Zeit ist NULL")).queue();
+                }
             } else {
                 e.getInteraction().reply(ID.hasNoPermissions).queue();
             }

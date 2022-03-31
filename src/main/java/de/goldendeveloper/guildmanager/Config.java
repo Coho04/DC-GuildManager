@@ -18,6 +18,10 @@ public class Config {
     private String DiscordToken;
     private String DiscordServer;
     private String DiscordWebhook;
+    private String MysqlHostname;
+    private String MysqlUsername;
+    private String MysqlPassword;
+    private int MysqlPort;
 
     public Config() {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
@@ -25,13 +29,39 @@ public class Config {
     }
 
     private void readXML(InputStream inputStream) {
+        this.MysqlHostname = "127.0.0.1";
+        this.MysqlUsername = "root";
+        this.MysqlPort = 3306;
+
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
             dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(inputStream);
             doc.getDocumentElement().normalize();
-            NodeList  list = doc.getElementsByTagName("Discord");
+            NodeList list = doc.getElementsByTagName("MYSQL");
+            for (int i = 0; i < list.getLength(); i++) {
+                if (list.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) list.item(i);
+                    String hostname = element.getElementsByTagName("Hostname").item(0).getTextContent();
+                    String username = element.getElementsByTagName("Username").item(0).getTextContent();
+                    String password = element.getElementsByTagName("Password").item(0).getTextContent();
+                    String port = element.getElementsByTagName("Port").item(0).getTextContent();
+                    if (!hostname.isEmpty() || !hostname.isBlank()) {
+                        this.MysqlHostname = hostname;
+                    }
+                    if (!username.isEmpty() || !username.isBlank()) {
+                        this.MysqlUsername = username;
+                    }
+                    if (!password.isEmpty() || !password.isBlank()) {
+                        this.MysqlPassword = password;
+                    }
+                    if (!port.isEmpty() || !port.isBlank()) {
+                        this.MysqlPort = Integer.parseInt(port);
+                    }
+                }
+            }
+            list = doc.getElementsByTagName("Discord");
             for (int i = 0; i < list.getLength(); i++) {
                 if (list.item(i).getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) list.item(i);
@@ -58,6 +88,10 @@ public class Config {
         return DiscordWebhook;
     }
 
+    public int getMysqlPort() {
+        return MysqlPort;
+    }
+
     public String getDiscordServer() {
         return DiscordServer;
     }
@@ -66,4 +100,15 @@ public class Config {
         return DiscordToken;
     }
 
+    public String getMysqlHostname() {
+        return MysqlHostname;
+    }
+
+    public String getMysqlPassword() {
+        return MysqlPassword;
+    }
+
+    public String getMysqlUsername() {
+        return MysqlUsername;
+    }
 }

@@ -1,4 +1,4 @@
-package de.goldendeveloper.guildmanager.commands;
+package de.goldendeveloper.guildmanager.commands.moderate;
 
 import de.goldendeveloper.guildmanager.ID;
 import net.dv8tion.jda.api.Permission;

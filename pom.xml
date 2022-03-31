@@ -92,6 +92,10 @@
             <name>m2-dv8tion</name>
             <url>https://m2.dv8tion.net/releases</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -114,6 +118,11 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.36</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.golden-developer</groupId>
+            <artifactId>MYSQL-Api</artifactId>
+            <version>2.5</version>
         </dependency>
     </dependencies>
 </project>

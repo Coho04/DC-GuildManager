@@ -3,6 +3,10 @@ package de.goldendeveloper.guildmanager.events;
 import de.goldendeveloper.guildmanager.commands.*;
 import de.goldendeveloper.guildmanager.commands.admin.Restart;
 import de.goldendeveloper.guildmanager.commands.admin.Shutdown;
+import de.goldendeveloper.guildmanager.commands.moderate.Ban;
+import de.goldendeveloper.guildmanager.commands.moderate.Kick;
+import de.goldendeveloper.guildmanager.commands.moderate.Settings;
+import de.goldendeveloper.guildmanager.commands.moderate.Timeout;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -11,6 +15,11 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 public class RegisterCommands extends ListenerAdapter {
 
     public static final String Ban = "ban";
+    public static final String settings = "settings";
+    public static final String settingsSupJoinRole = "join-role";
+    public static final String settingsSupJoinRoleOptionRole = "role";
+    public static final String settingsSupWMessage = "welcome-message";
+    public static final String settingsSupWMessageOptionChannel = "channel";
     public static final String Kick = "kick";
     public static final String Donate = "donate";
     public static final String Ping = "ping";
@@ -42,7 +51,6 @@ public class RegisterCommands extends ListenerAdapter {
             case Invite -> new Invite(e);
             case TimeOut -> new Timeout(e);
             case CmdRestart -> new Restart(e);
-            case Leave -> new GuildLeave(e);
             case Birthday -> new Birthday(e);
             case BotStats -> new BotStats(e);
             case CmdShutdown -> new Shutdown(e);
@@ -54,6 +62,7 @@ public class RegisterCommands extends ListenerAdapter {
             case Donate -> e.getInteraction().reply("Wenn du uns etwas Spenden möchtest dann kannst du dies gerne unter: https://spende.golden-developer.de/ machen! \n" + "Vielen Danke <3 !").queue();
             case Bot_Owner -> e.getInteraction().reply("Der Bot Owner ist die Organisation Golden-Developer").addActionRow(Button.link("https://dc.golden-developer.de/", "Zum Server")).queue();
             case Join -> e.getInteraction().reply("Hiermit kannst du mich auf deinen Server einladen: " + e.getJDA().setRequiredScopes("applications.commands").getInviteUrl(Permission.ADMINISTRATOR)).queue();
+            case settings -> new Settings(e);
         }
     }
 }
