@@ -1,75 +1,59 @@
 package de.goldendeveloper.guildmanager.events;
 
 import de.goldendeveloper.guildmanager.commands.*;
-import de.goldendeveloper.guildmanager.commands.admin.CMD_BOT_Activity;
-import de.goldendeveloper.guildmanager.commands.admin.CMD_BOT_Stop;
+import de.goldendeveloper.guildmanager.commands.admin.Restart;
+import de.goldendeveloper.guildmanager.commands.admin.Shutdown;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 public class RegisterCommands extends ListenerAdapter {
 
-    public static final String CMD_Ban_s = "ban";
-    public static final String CMD_Kick_s = "kick";
-    public static final String CMD_Donate_s = "donate";
-    public static final String CMD_Ping_s = "ping";
-    public static final String CMD_Error_report_s = "error-report";
-    public static final String CMD_Birthday_s = "birthday";
-    public static final String CMD_Invite_s = "invite";
-    public static final String CMD_Join_s = "join";
-    public static final String CMD_Leave_s = "leave";
-    public static final String CMD_Leave_Channel_s = "leave-channel";
-    public static final String CMD_Bot_Owner_s = "bot-owner";
-    public static final String CMD_Join_Channel_s = "join-channel";
-    public static final String CMD_Server_Owner_s = "server-owner";
-    public static final String CMD_Help_s = "help";
-    public static final String CMD_Stop_s = "stop";
-    public static final String CMD_TimeOut_s = "timeout";
-    public static final String CMD_Activity_s = "activity";
-    public static final String CMD_Server_Stats_s = "server-stats";
-    public static final String CMD_Bot_Stats_s = "bot-stats";
+    public static final String Ban = "ban";
+    public static final String Kick = "kick";
+    public static final String Donate = "donate";
+    public static final String Ping = "ping";
+    public static final String Error_report = "error-report";
+    public static final String Birthday = "birthday";
+    public static final String Invite = "invite";
+    public static final String Join = "join";
+    public static final String Leave = "leave";
+    public static final String Leave_Channel = "leave-channel";
+    public static final String Bot_Owner = "bot-owner";
+    public static final String Join_Channel = "join-channel";
+    public static final String Server_Owner = "server-owner";
+    public static final String Help = "help";
+    public static final String TimeOut = "timeout";
+    public static final String ServerStats = "server-stats";
+    public static final String BotStats = "bot-stats";
+
+    public static final String CmdShutdown = "shutdown";
+    public static final String CmdRestart = "restart";
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent e) {
         String cmd = e.getName();
-        if (cmd.equalsIgnoreCase(CMD_Ban_s)) {
-            CMD_Ban.onBanCommand(e);
-        } else if (cmd.equalsIgnoreCase(CMD_Kick_s)) {
-            CMD_Kick.onKickCommand(e);
-        } else if (cmd.equalsIgnoreCase(CMD_Leave_s)) {
-            CMD_Guild_Leave.onLeaveGuild(e);
-        } else if (cmd.equalsIgnoreCase(CMD_Leave_Channel_s)) {
-            CMD_Channel_Leave.onLeaveChannel(e);
-        } else if (cmd.equalsIgnoreCase(CMD_Join_Channel_s)) {
-            CMD_Channel_Join.onJoinChannel(e);
-        } else if (cmd.equalsIgnoreCase(CMD_Server_Owner_s)) {
-            CMD_Guild_Owner.onGuildOwner(e);
-        } else if (cmd.equalsIgnoreCase(CMD_Join_s)) {
-            CMD_BOT_Join.onBotJoin(e);
-        } else if (cmd.equalsIgnoreCase(CMD_Invite_s)) {
-            CMD_Invite.onInvite(e);
-        } else if (cmd.equalsIgnoreCase(CMD_Ping_s))  {
-            CMD_Ping.onPing(e);
-        } else if (cmd.equalsIgnoreCase(CMD_Donate_s)) {
-            CMD_Donate.onDonate(e);
-        } else if (cmd.equalsIgnoreCase(CMD_Error_report_s)) {
-            CMD_Error_report.onErrorReport(e);
-        } else if (cmd.equalsIgnoreCase(CMD_Birthday_s)) {
-            CMD_Birthday.onBirthday(e);
-        } else if (cmd.equalsIgnoreCase(CMD_Bot_Owner_s)) {
-            e.getInteraction().reply("Der Bot Owner ist die Organisation Golden-Developer").addActionRow(Button.link("https://discord.gg/", "Zum Server")).queue();
-        } else if (cmd.equalsIgnoreCase(CMD_Help_s)) {
-            CMD_Help.onHelp(e);
-        } else if (cmd.equalsIgnoreCase(CMD_Stop_s)) {
-            CMD_BOT_Stop.onBotStop(e);
-        } else if (cmd.equalsIgnoreCase(CMD_Activity_s)) {
-            CMD_BOT_Activity.onActivity(e);
-        } else if (cmd.equalsIgnoreCase(CMD_TimeOut_s)) {
-            CMD_Timeout.onTimeout(e);
-        } else if (cmd.equalsIgnoreCase(CMD_Server_Stats_s)) {
-            CMD_Server_Stats.onServerStats(e);
-        } else if (cmd.equalsIgnoreCase(CMD_Bot_Stats_s)) {
-            CMD_BOT_Stats.onBotStats(e);
+        switch (cmd) {
+            case Ban -> new Ban(e);
+            case Kick -> new Kick(e);
+            case Ping -> new Ping(e);
+            case Help -> new Help(e);
+            case Invite -> new Invite(e);
+            case TimeOut -> new Timeout(e);
+            case CmdRestart -> new Restart(e);
+            case Leave -> new GuildLeave(e);
+            case Birthday -> new Birthday(e);
+            case BotStats -> new BotStats(e);
+            case CmdShutdown -> new Shutdown(e);
+            case Server_Owner -> new GuildOwner(e);
+            case ServerStats -> new GuildStats(e);
+            case Error_report -> new ErrorReport(e);
+            case Join_Channel -> new ChannelJoin(e);
+            case Leave_Channel -> new ChannelLeave(e);
+            case Donate -> e.getInteraction().reply("Wenn du uns etwas Spenden möchtest dann kannst du dies gerne unter: https://spende.golden-developer.de/ machen! \n" + "Vielen Danke <3 !").queue();
+            case Bot_Owner -> e.getInteraction().reply("Der Bot Owner ist die Organisation Golden-Developer").addActionRow(Button.link("https://dc.golden-developer.de/", "Zum Server")).queue();
+            case Join -> e.getInteraction().reply("Hiermit kannst du mich auf deinen Server einladen: " + e.getJDA().setRequiredScopes("applications.commands").getInviteUrl(Permission.ADMINISTRATOR)).queue();
         }
     }
 }

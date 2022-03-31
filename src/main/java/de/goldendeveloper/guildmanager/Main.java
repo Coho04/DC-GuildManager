@@ -4,12 +4,18 @@ package de.goldendeveloper.guildmanager;
 public class Main {
 
     private static Discord discord;
+    private static Config config;
 
     public static void main(String[] args) {
-        discord = new Discord("OTU2OTEyMzkwNjczNDEyMTY2.Yj3IHA.BcfokCCajYi2jU_1tolo9xNErws");
+        config = new Config();
+        discord = new Discord(config.getDiscordToken());
     }
 
     public static Discord getDiscord() {
         return discord;
+    }
+
+    public static Config getConfig() {
+        return config;
     }
 }

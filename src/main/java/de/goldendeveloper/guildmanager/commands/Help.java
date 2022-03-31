@@ -9,9 +9,9 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import java.awt.*;
 import java.util.List;
 
-public class CMD_Help {
+public class Help {
 
-    public static void onHelp(SlashCommandInteractionEvent e) {
+    public Help(SlashCommandInteractionEvent e) {
         List<Command> cmd = Main.getDiscord().getBot().retrieveCommands().complete();
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("**Help Commands**");

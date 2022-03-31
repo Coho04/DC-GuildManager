@@ -1,5 +1,8 @@
 package de.goldendeveloper.guildmanager;
 
+import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.send.WebhookEmbed;
+import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import de.goldendeveloper.guildmanager.events.RegisterCommands;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -33,36 +36,54 @@ public class Discord {
                     .setAutoReconnect(true)
                     .build().awaitReady();
             registerCommand();
+            Online();
         } catch (LoginException | InterruptedException e) {
             e.printStackTrace();
         }
     }
 
     private void registerCommand() {
-        bot.upsertCommand(RegisterCommands.CMD_Leave_s, "Lässt den Bot den Server verlassen").queue();
-        bot.upsertCommand(RegisterCommands.CMD_Server_Owner_s, "Nennt den Server Inhaber").queue();
-        bot.upsertCommand(RegisterCommands.CMD_Join_s, "Der Bot sendet dir einen link um ihn einzuladen").queue();
-        bot.upsertCommand(RegisterCommands.CMD_Invite_s, "Du wirst eingeladen auf unseren Discord").queue();
-        bot.upsertCommand(RegisterCommands.CMD_Join_Channel_s, "Der Bot betritt deinen Voice Channel").queue();
-        bot.upsertCommand(RegisterCommands.CMD_Leave_Channel_s, "Der Bot verlässt deinen Voice Channel").queue();
-        bot.upsertCommand(RegisterCommands.CMD_Help_s, "Zeigt eine Liste von möglichen Befehlen").queue();
-        bot.upsertCommand(RegisterCommands.CMD_Birthday_s, "Gratuliere einem anderen User").addOption(OptionType.USER, "user", "Fügt einen anderen User hinzu", true).addOption(OptionType.BOOLEAN, "private", "Möchtest du dem User die Glückwünsche privat zukommen lassen?").queue();
-        bot.upsertCommand(RegisterCommands.CMD_Bot_Owner_s, "Zeigt dir den Bot Programmierer").queue();
-        bot.upsertCommand(RegisterCommands.CMD_Error_report_s, "Reporte einen Bot fehler").addOption(OptionType.STRING, "error", "Schildere hier deinen gefundenen Bot Fehler", true).queue();
-        bot.upsertCommand(RegisterCommands.CMD_Ping_s, "Antwortet mit Pong").queue();
-        bot.upsertCommand(RegisterCommands.CMD_Donate_s, "Zeigt dir eine Spende möglichkeit").queue();
-        bot.upsertCommand(RegisterCommands.CMD_Server_Stats_s, "Zeigt dir die Stats des Servers").queue();
-        bot.upsertCommand(RegisterCommands.CMD_Bot_Stats_s, "Zeigt dir die Stats des Bots").queue();
-        bot.upsertCommand(RegisterCommands.CMD_Donate_s, "Zeigt dir eine Spende möglichkeit").queue();
-        bot.upsertCommand(RegisterCommands.CMD_Ban_s, "Bannt einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.INTEGER, "time", "Gib die Ban Dauer in Tagen an um den User zu bannen", true).addOption(OptionType.STRING, "reason", "Begründe deinen Ban", true).queue();
-        bot.upsertCommand(RegisterCommands.CMD_Kick_s, "Kickt einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.STRING, "reason", "Begründe deinen Kick", true).queue();
-        bot.upsertCommand(RegisterCommands.CMD_TimeOut_s, "Timeoutet einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.STRING, "time", "Gib die Timeout Dauer in Tagen an um den User zu timeouten. (In Minuten)", true).queue();
-        bot.upsertCommand(RegisterCommands.CMD_Stop_s, "Stoppt den Bot").queue();
-        bot.upsertCommand(RegisterCommands.CMD_Activity_s, "Ändert die Aktivität des Bots").addOption(OptionType.STRING, "type", "playing watching competing streaming listening custom", true).addOption(OptionType.STRING, "activity", "Hier kommt die Aktivität hin", true).addOption(OptionType.STRING, "url", "Füge deiner Option eine URL hinzu").queue();
+        bot.upsertCommand(RegisterCommands.Leave, "Lässt den Bot den Server verlassen").queue();
+        bot.upsertCommand(RegisterCommands.Server_Owner, "Nennt den Server Inhaber").queue();
+        bot.upsertCommand(RegisterCommands.Join, "Der Bot sendet dir einen link um ihn einzuladen").queue();
+        bot.upsertCommand(RegisterCommands.Invite, "Du wirst eingeladen auf unseren Discord").queue();
+        bot.upsertCommand(RegisterCommands.Join_Channel, "Der Bot betritt deinen Voice Channel").queue();
+        bot.upsertCommand(RegisterCommands.Leave_Channel, "Der Bot verlässt deinen Voice Channel").queue();
+        bot.upsertCommand(RegisterCommands.Help, "Zeigt eine Liste von möglichen Befehlen").queue();
+        bot.upsertCommand(RegisterCommands.Birthday, "Gratuliere einem anderen User").addOption(OptionType.USER, "user", "Fügt einen anderen User hinzu", true).addOption(OptionType.BOOLEAN, "private", "Möchtest du dem User die Glückwünsche privat zukommen lassen?").queue();
+        bot.upsertCommand(RegisterCommands.Bot_Owner, "Zeigt dir den Bot Programmierer").queue();
+        bot.upsertCommand(RegisterCommands.Error_report, "Reporte einen Bot fehler").addOption(OptionType.STRING, "error", "Schildere hier deinen gefundenen Bot Fehler", true).queue();
+        bot.upsertCommand(RegisterCommands.Ping, "Antwortet mit Pong").queue();
+        bot.upsertCommand(RegisterCommands.Donate, "Zeigt dir eine Spende möglichkeit").queue();
+        bot.upsertCommand(RegisterCommands.ServerStats, "Zeigt dir die Stats des Servers").queue();
+        bot.upsertCommand(RegisterCommands.BotStats, "Zeigt dir die Stats des Bots").queue();
+        bot.upsertCommand(RegisterCommands.Donate, "Zeigt dir eine Spende möglichkeit").queue();
+        bot.upsertCommand(RegisterCommands.Ban, "Bannt einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.INTEGER, "time", "Gib die Ban Dauer in Tagen an um den User zu bannen", true).addOption(OptionType.STRING, "reason", "Begründe deinen Ban", true).queue();
+        bot.upsertCommand(RegisterCommands.Kick, "Kickt einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.STRING, "reason", "Begründe deinen Kick", true).queue();
+        bot.upsertCommand(RegisterCommands.TimeOut, "Timeoutet einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.STRING, "time", "Gib die Timeout Dauer in Tagen an um den User zu timeouten. (In Minuten)", true).queue();
+        bot.upsertCommand(RegisterCommands.CmdShutdown, "Stoppt den Discord Bot!").queue();
+        bot.upsertCommand(RegisterCommands.CmdRestart, "Startet den Discord Bot neu!").queue();
+    }
 
+    public void sendErrorMessage(String Error) {
+        WebhookEmbedBuilder embed = new WebhookEmbedBuilder();
+        embed.setAuthor(new WebhookEmbed.EmbedAuthor(getBot().getSelfUser().getName(), getBot().getSelfUser().getAvatarUrl(), "https://Golden-Developer.de"));
+        embed.addField(new WebhookEmbed.EmbedField(false, "[ERROR]", Error));
+        embed.setColor(0xFF0000);
+        embed.setFooter(new WebhookEmbed.EmbedFooter("@Golden-Developer", getBot().getSelfUser().getAvatarUrl()));
+        new WebhookClientBuilder(Main.getConfig().getDiscordWebhook()).build().send(embed.build());
     }
 
     public JDA getBot() {
         return bot;
+    }
+
+    private void Online() {
+        WebhookEmbedBuilder embed = new WebhookEmbedBuilder();
+        embed.setAuthor(new WebhookEmbed.EmbedAuthor(getBot().getSelfUser().getName(), getBot().getSelfUser().getAvatarUrl(), "https://Golden-Developer.de"));
+        embed.addField(new WebhookEmbed.EmbedField(false, "[Status]", "ONLINE"));
+        embed.setColor(0x00FF00);
+        embed.setFooter(new WebhookEmbed.EmbedFooter("@Golden-Developer", getBot().getSelfUser().getAvatarUrl()));
+        new WebhookClientBuilder(Main.getConfig().getDiscordWebhook()).build().send(embed.build());
     }
 }

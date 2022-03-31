@@ -6,7 +6,6 @@ import net.dv8tion.jda.api.entities.Member;
 
 public class ID {
 
-    public static String _Coho04_Community_Server = "817500165866782770";
     public static String _Coho04_MEMBER = "513306244371447828";
     public static String hasNoPermissions = "[ERROR]: Für den Command hast du nicht genügend Rechte";
 

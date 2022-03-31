@@ -5,9 +5,9 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class CMD_Kick {
+public class Kick {
 
-    public static void onKickCommand(SlashCommandInteractionEvent e) {
+    public Kick(SlashCommandInteractionEvent e) {
         Member m = e.getMember();
         if (m != null) {
             if (m.hasPermission(Permission.KICK_MEMBERS) || m.hasPermission(Permission.ADMINISTRATOR)) {

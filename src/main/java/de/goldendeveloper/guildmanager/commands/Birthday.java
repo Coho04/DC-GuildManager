@@ -5,9 +5,9 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class CMD_Birthday {
+public class Birthday {
 
-    public static void onBirthday(SlashCommandInteractionEvent e) {
+    public Birthday(SlashCommandInteractionEvent e) {
         Member member = e.getMember();
         if (member != null) {
             User u = e.getOption("user").getAsUser();

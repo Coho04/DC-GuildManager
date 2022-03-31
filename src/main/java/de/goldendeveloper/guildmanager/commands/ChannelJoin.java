@@ -6,9 +6,9 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 
-public class CMD_Channel_Join {
+public class ChannelJoin {
 
-    public static void onJoinChannel(SlashCommandInteractionEvent e) {
+    public ChannelJoin(SlashCommandInteractionEvent e) {
         Member m = e.getMember();
         if (m != null) {
             GuildVoiceState voice = m.getVoiceState();

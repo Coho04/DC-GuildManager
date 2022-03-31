@@ -1,0 +1,13 @@
+<login>
+    <MYSQL>
+        <Hostname>HOSTNAME</Hostname>
+        <Username>USERNAME</Username>
+        <Password>PASSWORD</Password>
+        <Port>PORT</Port>
+    </MYSQL>
+    <Discord>
+        <Server>SERVER</Server>
+        <Token>TOKEN</Token>
+        <Webhook>WEBHOOK</Webhook>
+    </Discord>
+</login>

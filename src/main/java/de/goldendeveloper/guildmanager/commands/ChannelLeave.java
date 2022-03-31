@@ -6,9 +6,9 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class CMD_Channel_Leave {
+public class ChannelLeave {
 
-    public static void onLeaveChannel(SlashCommandInteractionEvent e) {
+    public ChannelLeave(SlashCommandInteractionEvent e) {
         Member m = e.getMember();
         if (m != null) {
             Guild g = e.getGuild();

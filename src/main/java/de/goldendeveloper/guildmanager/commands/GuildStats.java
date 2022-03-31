@@ -6,9 +6,9 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 import java.awt.*;
 
-public class CMD_Server_Stats {
+public class GuildStats {
 
-    public static void onServerStats(SlashCommandInteractionEvent e) {
+    public GuildStats(SlashCommandInteractionEvent e) {
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setTitle("**Server Stats**");
         embedBuilder.setFooter("@Golden-Developer", e.getJDA().getSelfUser().getAvatarUrl());

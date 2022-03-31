@@ -1,6 +1,7 @@
 package de.goldendeveloper.guildmanager.commands;
 
 import de.goldendeveloper.guildmanager.ID;
+import de.goldendeveloper.guildmanager.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
@@ -9,11 +10,11 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.awt.*;
 
-public class CMD_BOT_Stats {
+public class BotStats {
 
-    public static void onBotStats(SlashCommandInteractionEvent e) {
+    public BotStats(SlashCommandInteractionEvent e) {
         User user = e.getJDA().getUserById(ID._Coho04_MEMBER);
-        Guild MainServer = e.getJDA().getGuildById(ID._Coho04_Community_Server);
+        Guild MainServer = e.getJDA().getGuildById(Main.getConfig().getDiscordServer());
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("**Server Stats**");

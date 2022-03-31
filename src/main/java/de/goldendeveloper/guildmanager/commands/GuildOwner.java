@@ -6,9 +6,9 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class CMD_Guild_Owner {
+public class GuildOwner {
 
-    public static void onGuildOwner(SlashCommandInteractionEvent e) {
+    public GuildOwner(SlashCommandInteractionEvent e) {
         Guild g = e.getGuild();
         if (g != null) {
             if (g.getOwner() != null) {

@@ -5,9 +5,9 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class CMD_Ban {
+public class Ban {
 
-    public static void onBanCommand(SlashCommandInteractionEvent e) {
+    public Ban(SlashCommandInteractionEvent e) {
         Member m = e.getMember();
         if (m != null) {
             if (m.hasPermission(Permission.BAN_MEMBERS) || m.hasPermission(Permission.ADMINISTRATOR)) {

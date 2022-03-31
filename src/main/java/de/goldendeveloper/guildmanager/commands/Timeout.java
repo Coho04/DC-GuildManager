@@ -7,9 +7,9 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 import java.util.concurrent.TimeUnit;
 
-public class CMD_Timeout {
+public class Timeout {
 
-    public static void onTimeout(SlashCommandInteractionEvent e) {
+    public Timeout(SlashCommandInteractionEvent e) {
         Member m = e.getMember();
         if (m != null) {
             if (m.hasPermission(Permission.ADMINISTRATOR)) {
