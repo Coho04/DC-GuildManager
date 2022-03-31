@@ -18,6 +18,8 @@ public class RegisterCommands extends ListenerAdapter {
     public static final String settings = "settings";
     public static final String settingsSupJoinRole = "join-role";
     public static final String settingsSupJoinRoleOptionRole = "role";
+    public static final String settingsSupRemove = "remove";
+    public static final String settingsSupRemoveOptionName = "name";
     public static final String settingsSupWMessage = "welcome-message";
     public static final String settingsSupWMessageOptionChannel = "channel";
     public static final String Kick = "kick";

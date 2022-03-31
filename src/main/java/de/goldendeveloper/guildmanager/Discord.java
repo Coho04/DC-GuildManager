@@ -71,6 +71,7 @@ public class Discord {
         bot.upsertCommand(RegisterCommands.settings, "Stelle den GuildManager ein!")
                 .addSubcommands(
                         new SubcommandData(RegisterCommands.settingsSupJoinRole, "").addOption(OptionType.ROLE, RegisterCommands.settingsSupJoinRoleOptionRole, ""),
+                        new SubcommandData(RegisterCommands.settingsSupRemove, "").addOption(OptionType.ROLE, RegisterCommands.settingsSupRemoveOptionName, ""),
                         new SubcommandData(RegisterCommands.settingsSupWMessage, "").addOption(OptionType.CHANNEL,RegisterCommands.settingsSupWMessage, "")
                 ).queue();
     }
