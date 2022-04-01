@@ -22,7 +22,6 @@ public class GuildStats {
         embedBuilder.addField("TextChannel", String.valueOf(e.getGuild().getTextChannels().size()), true);
         embedBuilder.addField("VoiceChannel", String.valueOf(e.getGuild().getVoiceChannels().size()), true);
         embedBuilder.addField("Server Owner", e.getGuild().getOwner().getUser().getName(), true);
-
         e.getInteraction().replyEmbeds(embedBuilder.build()).queue();
     }
 }

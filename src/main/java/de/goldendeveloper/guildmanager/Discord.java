@@ -70,9 +70,11 @@ public class Discord {
 
         bot.upsertCommand(RegisterCommands.settings, "Stelle den GuildManager ein!")
                 .addSubcommands(
-                        new SubcommandData(RegisterCommands.settingsSupJoinRole, "").addOption(OptionType.ROLE, RegisterCommands.settingsSupJoinRoleOptionRole, ""),
-                        new SubcommandData(RegisterCommands.settingsSupRemove, "").addOption(OptionType.ROLE, RegisterCommands.settingsSupRemoveOptionName, ""),
-                        new SubcommandData(RegisterCommands.settingsSupWMessage, "").addOption(OptionType.CHANNEL,RegisterCommands.settingsSupWMessage, "")
+                        new SubcommandData(RegisterCommands.settingsSupJoinRole, "Die Rolle die einem User automatisch beim Joinen gegeben werden soll!")
+                                .addOption(OptionType.ROLE, RegisterCommands.settingsSupJoinRoleOptionRole, "Join Rolle", true),
+                        new SubcommandData(RegisterCommands.settingsSupRemove, "Zeigt die eine Liste aller Option die Entfernt werden können!" ),
+                        new SubcommandData(RegisterCommands.settingsSupWMessage, "Setzte einen Willkommens Channel um deine User willkommen zu heißen!")
+                                .addOption(OptionType.CHANNEL, RegisterCommands.settingsSupWMessageOptionChannel, "Willkommens Channel", true)
                 ).queue();
     }
 

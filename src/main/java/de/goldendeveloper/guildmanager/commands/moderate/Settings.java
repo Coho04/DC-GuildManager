@@ -5,10 +5,12 @@ import de.goldendeveloper.guildmanager.Main;
 import de.goldendeveloper.guildmanager.events.RegisterCommands;
 import de.goldendeveloper.mysql.entities.Row;
 import de.goldendeveloper.mysql.entities.Table;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 
 import java.util.HashMap;
 
@@ -75,39 +77,15 @@ public class Settings {
                     Main.getDiscord().sendErrorMessage("Database " + Main.dbName + " existiert nicht");
                 }
             } else if (e.getSubcommandName().equalsIgnoreCase(RegisterCommands.settingsSupRemove)) {
-                if (Main.getMysql().existsDatabase(Main.dbName)) {
-                    if (Main.getMysql().getDatabase(Main.dbName).existsTable(Main.settingsTName)) {
-                        Table table = Main.getMysql().getDatabase(Main.dbName).getTable(Main.settingsTName);
-                        if (table.existsColumn(Main.colmGuild)) {
-                            HashMap<String, Object> row = table.getRow(table.getColumn(Main.colmGuild), e.getGuild().getId());
-                            String removeOption = e.getOption("").getAsString();
-                            switch (removeOption) {
-                                case RegisterCommands.settingsSupJoinRole -> {
-                                    if (!row.get(Main.colmJRole).toString().isEmpty()) {
-                                        table.getColumn(Main.colmJRole).set("", Integer.parseInt(row.get("id").toString()));
-                                        e.getInteraction().reply("Die Einstellung für die Join Rolle wurde entfernt").queue();
-                                    } else {
-                                        e.getInteraction().reply("Es ist keine Einstellung mit dieser Option vorhanden!").queue();
-                                    }
-                                }
-                                case RegisterCommands.settingsSupWMessage -> {
-                                    if (!row.get(Main.colmWChannel).toString().isEmpty()) {
-                                        table.getColumn(Main.colmWChannel).set("", Integer.parseInt(row.get("id").toString()));
-                                        e.getInteraction().reply("Die Einstellung für die Willkommens Nachricht wurde entfernt").queue();
-                                    } else {
-                                        e.getInteraction().reply("Es ist keine Einstellung mit dieser Option vorhanden!").queue();
-                                    }
-                                }
-                            }
-                        } else {
-                            Main.getDiscord().sendErrorMessage("Column " + Main.colmGuild + " in " + Main.settingsTName + " existiert nicht");
-                        }
-                    } else {
-                        Main.getDiscord().sendErrorMessage("Table " + Main.settingsTName + " in " + Main.dbName + " existiert nicht");
-                    }
-                } else {
-                    Main.getDiscord().sendErrorMessage("Database " + Main.dbName + " existiert nicht");
-                }
+                EmbedBuilder builder = new EmbedBuilder();
+                builder.setTitle("**Remove Option**");
+                builder.setDescription("Entferne hier eine eingestellte Option für diesen Discord Server");
+                e.getInteraction().replyEmbeds(builder.build()).addActionRow(
+                        SelectMenu.create("removeSelect")
+                                .addOption("Join Role", RegisterCommands.settingsSupJoinRole)
+                                .addOption("Willkommens Nachricht", RegisterCommands.settingsSupWMessage)
+                                .build()
+                ).queue();
             }
         } else {
             e.getInteraction().reply(ID.hasNoPermissions).queue();

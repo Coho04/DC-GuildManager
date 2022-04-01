@@ -29,7 +29,6 @@ public class RegisterCommands extends ListenerAdapter {
     public static final String Birthday = "birthday";
     public static final String Invite = "invite";
     public static final String Join = "join";
-    public static final String Leave = "leave";
     public static final String Leave_Channel = "leave-channel";
     public static final String Bot_Owner = "bot-owner";
     public static final String Join_Channel = "join-channel";

@@ -22,8 +22,8 @@ public class Help {
         }
         e.getInteraction().replyEmbeds(embed.build())
                 .addActionRow(
-                        Button.link("https://wiki.golden-developer.de", "Online Übersicht"),
-                        Button.link("https://support.golden-developer.de", "Support Anfragen")
+                        Button.link("https://wiki.Golden-Developer.de", "Online Übersicht"),
+                        Button.link("https://support.Golden-Developer.de", "Support Anfragen")
                 ).queue();
     }
 }

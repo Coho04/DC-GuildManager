@@ -34,15 +34,16 @@ public class Main {
             db.createTable(settingsTName);
         }
         Table tb = db.getTable(settingsTName);
-        if (tb.existsColumn(colmGuild)) {
+        if (!tb.existsColumn(colmGuild)) {
             tb.addColumn(colmGuild, MysqlTypes.VARCHAR, 80);
         }
-        if (tb.existsColumn(colmWChannel)) {
+        if (!tb.existsColumn(colmWChannel)) {
             tb.addColumn(colmWChannel, MysqlTypes.VARCHAR, 80);
         }
-        if (tb.existsColumn(colmJRole)) {
+        if (!tb.existsColumn(colmJRole)) {
             tb.addColumn(colmJRole, MysqlTypes.VARCHAR, 80);
         }
+        System.out.println("MYSQL Finished");
     }
 
     public static Discord getDiscord() {
