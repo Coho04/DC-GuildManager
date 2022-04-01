@@ -3,10 +3,7 @@ package de.goldendeveloper.guildmanager.events;
 import de.goldendeveloper.guildmanager.commands.*;
 import de.goldendeveloper.guildmanager.commands.admin.Restart;
 import de.goldendeveloper.guildmanager.commands.admin.Shutdown;
-import de.goldendeveloper.guildmanager.commands.moderate.Ban;
-import de.goldendeveloper.guildmanager.commands.moderate.Kick;
-import de.goldendeveloper.guildmanager.commands.moderate.Settings;
-import de.goldendeveloper.guildmanager.commands.moderate.Timeout;
+import de.goldendeveloper.guildmanager.commands.moderate.*;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -19,7 +16,6 @@ public class RegisterCommands extends ListenerAdapter {
     public static final String settingsSupJoinRole = "join-role";
     public static final String settingsSupJoinRoleOptionRole = "role";
     public static final String settingsSupRemove = "remove";
-    public static final String settingsSupRemoveOptionName = "name";
     public static final String settingsSupWMessage = "welcome-message";
     public static final String settingsSupWMessageOptionChannel = "channel";
     public static final String Kick = "kick";
@@ -38,6 +34,9 @@ public class RegisterCommands extends ListenerAdapter {
     public static final String ServerStats = "server-stats";
     public static final String BotStats = "bot-stats";
 
+    public static final String Clear = "clear";
+    public static final String ClearOptionAmount = "anzahl";
+
     public static final String CmdShutdown = "shutdown";
     public static final String CmdRestart = "restart";
 
@@ -45,6 +44,7 @@ public class RegisterCommands extends ListenerAdapter {
     public void onSlashCommandInteraction(SlashCommandInteractionEvent e) {
         String cmd = e.getName();
         switch (cmd) {
+            case Clear -> new Clear(e);
             case Ban -> new Ban(e);
             case Kick -> new Kick(e);
             case Ping -> new Ping(e);

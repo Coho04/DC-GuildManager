@@ -67,11 +67,11 @@ public class Discord {
         bot.upsertCommand(RegisterCommands.TimeOut, "Timeoutet einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.STRING, "time", "Gib die Timeout Dauer in Tagen an um den User zu timeouten. (In Minuten)", true).queue();
         bot.upsertCommand(RegisterCommands.CmdShutdown, "Stoppt den Discord Bot!").queue();
         bot.upsertCommand(RegisterCommands.CmdRestart, "Startet den Discord Bot neu!").queue();
+        bot.upsertCommand(RegisterCommands.Clear, "Löscht eine Anzahl von Nachrichten!").addOption(OptionType.INTEGER, RegisterCommands.ClearOptionAmount, "Anzahl von löschenden Nachrichten!").queue();
 
         bot.upsertCommand(RegisterCommands.settings, "Stelle den GuildManager ein!")
                 .addSubcommands(
-                        new SubcommandData(RegisterCommands.settingsSupJoinRole, "Die Rolle die einem User automatisch beim Joinen gegeben werden soll!")
-                                .addOption(OptionType.ROLE, RegisterCommands.settingsSupJoinRoleOptionRole, "Join Rolle", true),
+                        new SubcommandData(RegisterCommands.settingsSupJoinRole, "Die Rolle die einem User automatisch beim Joinen gegeben werden soll!").addOption(OptionType.ROLE, RegisterCommands.settingsSupJoinRoleOptionRole, "Join Rolle", true),
                         new SubcommandData(RegisterCommands.settingsSupRemove, "Zeigt die eine Liste aller Option die Entfernt werden können!" ),
                         new SubcommandData(RegisterCommands.settingsSupWMessage, "Setzte einen Willkommens Channel um deine User willkommen zu heißen!")
                                 .addOption(OptionType.CHANNEL, RegisterCommands.settingsSupWMessageOptionChannel, "Willkommens Channel", true)
