@@ -4,14 +4,16 @@ import de.goldendeveloper.guildmanager.ID;
 import de.goldendeveloper.guildmanager.Main;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
-public class Invite {
+public class ServerInvite {
 
-    public Invite(SlashCommandInteractionEvent e) {
+    public ServerInvite(SlashCommandInteractionEvent e) {
         Guild g = e.getJDA().getGuildById(Main.getConfig().getDiscordServer());
         if (g != null) {
-            net.dv8tion.jda.api.entities.Invite inv = g.getTextChannelById(747208323761176586L).createInvite().complete();
-            e.getInteraction().reply("Hiermit trittst du meinem Server bei:" + inv.getUrl()).queue();
+            e.getInteraction().reply("Mit dem Button unten kannst du unserem Server beitreten!")
+                    .addActionRow(Button.link(g.getTextChannelById(747208323761176586L).createInvite().complete().getUrl(), "Zum Server"))
+                    .queue();
         } else {
             e.getInteraction().reply(ID.hasError("Guild is NULL")).queue();
         }
