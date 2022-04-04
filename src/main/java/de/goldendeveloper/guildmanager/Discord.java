@@ -39,6 +39,7 @@ public class Discord {
                             GatewayIntent.GUILD_MESSAGE_TYPING)
                     .addEventListeners(new RegisterCommands(), new Events())
                     .setAutoReconnect(true)
+                    .setContextEnabled(true)
                     .build().awaitReady();
             registerCommand();
             Online();
@@ -48,33 +49,32 @@ public class Discord {
     }
 
     private void registerCommand() {
+        bot.upsertCommand(RegisterCommands.Ping, "Antwortet mit Pong").queue();
+        bot.upsertCommand(RegisterCommands.CmdShutdown, "Stoppt den Discord Bot!").queue();
+        bot.upsertCommand(RegisterCommands.BotStats, "Zeigt dir die Stats des Bots").queue();
         bot.upsertCommand(RegisterCommands.Server_Owner, "Nennt den Server Inhaber").queue();
-        bot.upsertCommand(RegisterCommands.Join, "Der Bot sendet dir einen link um ihn einzuladen").queue();
+        bot.upsertCommand(RegisterCommands.CmdRestart, "Startet den Discord Bot neu!").queue();
+        bot.upsertCommand(RegisterCommands.Donate, "Zeigt dir eine Spende möglichkeit").queue();
+        bot.upsertCommand(RegisterCommands.Donate, "Zeigt dir eine Spende möglichkeit").queue();
+        bot.upsertCommand(RegisterCommands.Bot_Owner, "Zeigt dir den Bot Programmierer").queue();
+        bot.upsertCommand(RegisterCommands.ServerStats, "Zeigt dir die Stats des Servers").queue();
+        bot.upsertCommand(RegisterCommands.Help, "Zeigt eine Liste von möglichen Befehlen").queue();
         bot.upsertCommand(RegisterCommands.Invite, "Du wirst eingeladen auf unseren Discord").queue();
         bot.upsertCommand(RegisterCommands.Join_Channel, "Der Bot betritt deinen Voice Channel").queue();
         bot.upsertCommand(RegisterCommands.Leave_Channel, "Der Bot verlässt deinen Voice Channel").queue();
-        bot.upsertCommand(RegisterCommands.Help, "Zeigt eine Liste von möglichen Befehlen").queue();
-        bot.upsertCommand(RegisterCommands.Birthday, "Gratuliere einem anderen User").addOption(OptionType.USER, "user", "Fügt einen anderen User hinzu", true).addOption(OptionType.BOOLEAN, "private", "Möchtest du dem User die Glückwünsche privat zukommen lassen?").queue();
-        bot.upsertCommand(RegisterCommands.Bot_Owner, "Zeigt dir den Bot Programmierer").queue();
+        bot.upsertCommand(RegisterCommands.Join, "Der Bot sendet dir einen link um ihn einzuladen").queue();
         bot.upsertCommand(RegisterCommands.Error_report, "Reporte einen Bot fehler").addOption(OptionType.STRING, "error", "Schildere hier deinen gefundenen Bot Fehler", true).queue();
-        bot.upsertCommand(RegisterCommands.Ping, "Antwortet mit Pong").queue();
-        bot.upsertCommand(RegisterCommands.Donate, "Zeigt dir eine Spende möglichkeit").queue();
-        bot.upsertCommand(RegisterCommands.ServerStats, "Zeigt dir die Stats des Servers").queue();
-        bot.upsertCommand(RegisterCommands.BotStats, "Zeigt dir die Stats des Bots").queue();
-        bot.upsertCommand(RegisterCommands.Donate, "Zeigt dir eine Spende möglichkeit").queue();
+        bot.upsertCommand(RegisterCommands.Birthday, "Gratuliere einem anderen User").addOption(OptionType.USER, "user", "Fügt einen anderen User hinzu", true).addOption(OptionType.BOOLEAN, "private", "Möchtest du dem User die Glückwünsche privat zukommen lassen?").queue();
         bot.upsertCommand(RegisterCommands.Ban, "Bannt einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.INTEGER, "time", "Gib die Ban Dauer in Tagen an um den User zu bannen", true, true).addOption(OptionType.STRING, "reason", "Begründe deinen Ban", true).queue();
-        bot.upsertCommand(RegisterCommands.Kick, "Kickt einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.STRING, "reason", "Begründe deinen Kick", true).queue();
+        bot.upsertCommand(RegisterCommands.Kick, "Kickt einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.STRING, "reason", "Begründe deinen Kick").queue();
         bot.upsertCommand(RegisterCommands.TimeOut, "Timeoute einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.STRING, "time", "Gib die Timeout Dauer in Tagen an um den User zu timeouten. (In Minuten)", true).queue();
-        bot.upsertCommand(RegisterCommands.CmdShutdown, "Stoppt den Discord Bot!").queue();
-        bot.upsertCommand(RegisterCommands.CmdRestart, "Startet den Discord Bot neu!").queue();
         bot.upsertCommand(RegisterCommands.Clear, "Löscht eine Anzahl von Nachrichten!").addOption(OptionType.INTEGER, RegisterCommands.ClearOptionAmount, "Anzahl von löschenden Nachrichten!").queue();
 
         bot.upsertCommand(RegisterCommands.settings, "Stelle den GuildManager ein!")
                 .addSubcommands(
                         new SubcommandData(RegisterCommands.settingsSupJoinRole, "Die Rolle die einem User automatisch beim Joinen gegeben werden soll!").addOption(OptionType.ROLE, RegisterCommands.settingsSupJoinRoleOptionRole, "Join Rolle", true),
                         new SubcommandData(RegisterCommands.settingsSupRemove, "Zeigt die eine Liste aller Option die Entfernt werden können!" ),
-                        new SubcommandData(RegisterCommands.settingsSupWMessage, "Setzte einen Willkommens Channel um deine User willkommen zu heißen!")
-                                .addOption(OptionType.CHANNEL, RegisterCommands.settingsSupWMessageOptionChannel, "Willkommens Channel", true)
+                        new SubcommandData(RegisterCommands.settingsSupWMessage, "Setzte einen Willkommens Channel um deine User willkommen zu heißen!").addOption(OptionType.CHANNEL, RegisterCommands.settingsSupWMessageOptionChannel, "Willkommens Channel", true)
                 ).queue();
     }
 

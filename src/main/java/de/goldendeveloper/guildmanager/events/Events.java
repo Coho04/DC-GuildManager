@@ -135,14 +135,14 @@ public class Events extends ListenerAdapter {
         String cmd = e.getName();
         if (cmd.equalsIgnoreCase(RegisterCommands.Ban)) {
             System.out.println(e.getFocusedOption().getName());
-            if (e.getFocusedOption().equals(e.getOption(RegisterCommands.BanOptionTime))) {
+            if (e.getFocusedOption().getName().equalsIgnoreCase(RegisterCommands.BanOptionTime)) {
                 e.getInteraction().replyChoices(
-                        new Command.Choice("Permanent", 9),
+                        new Command.Choice("Permanent", 9999),
+                        new Command.Choice("14 Tag", 14),
+                        new Command.Choice("7 Tag", 7),
+                        new Command.Choice("5 Tag", 5),
                         new Command.Choice("3 Tag", 3),
-                        new Command.Choice("1 Tag", 1),
-                        new Command.Choice("3 Stunden", 3),
-                        new Command.Choice("1 Stunde", 1),
-                        new Command.Choice("30 Minuten", 3),
+                        new Command.Choice("2 Tag", 2),
                         new Command.Choice("1 Tag", 1)
                 ).queue();
             }
