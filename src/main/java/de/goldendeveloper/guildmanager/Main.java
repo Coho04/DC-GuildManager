@@ -1,6 +1,5 @@
 package de.goldendeveloper.guildmanager;
 
-
 import de.goldendeveloper.mysql.MYSQL;
 import de.goldendeveloper.mysql.entities.Database;
 import de.goldendeveloper.mysql.entities.MysqlTypes;

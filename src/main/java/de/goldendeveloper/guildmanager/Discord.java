@@ -62,9 +62,9 @@ public class Discord {
         bot.upsertCommand(RegisterCommands.ServerStats, "Zeigt dir die Stats des Servers").queue();
         bot.upsertCommand(RegisterCommands.BotStats, "Zeigt dir die Stats des Bots").queue();
         bot.upsertCommand(RegisterCommands.Donate, "Zeigt dir eine Spende möglichkeit").queue();
-        bot.upsertCommand(RegisterCommands.Ban, "Bannt einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.INTEGER, "time", "Gib die Ban Dauer in Tagen an um den User zu bannen", true).addOption(OptionType.STRING, "reason", "Begründe deinen Ban", true).queue();
+        bot.upsertCommand(RegisterCommands.Ban, "Bannt einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.INTEGER, "time", "Gib die Ban Dauer in Tagen an um den User zu bannen", true, true).addOption(OptionType.STRING, "reason", "Begründe deinen Ban", true).queue();
         bot.upsertCommand(RegisterCommands.Kick, "Kickt einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.STRING, "reason", "Begründe deinen Kick", true).queue();
-        bot.upsertCommand(RegisterCommands.TimeOut, "Timeoutet einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.STRING, "time", "Gib die Timeout Dauer in Tagen an um den User zu timeouten. (In Minuten)", true).queue();
+        bot.upsertCommand(RegisterCommands.TimeOut, "Timeoute einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.STRING, "time", "Gib die Timeout Dauer in Tagen an um den User zu timeouten. (In Minuten)", true).queue();
         bot.upsertCommand(RegisterCommands.CmdShutdown, "Stoppt den Discord Bot!").queue();
         bot.upsertCommand(RegisterCommands.CmdRestart, "Startet den Discord Bot neu!").queue();
         bot.upsertCommand(RegisterCommands.Clear, "Löscht eine Anzahl von Nachrichten!").addOption(OptionType.INTEGER, RegisterCommands.ClearOptionAmount, "Anzahl von löschenden Nachrichten!").queue();

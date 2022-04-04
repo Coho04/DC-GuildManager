@@ -6,8 +6,11 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import org.jetbrains.annotations.NotNull;
 
@@ -125,5 +128,30 @@ public class Events extends ListenerAdapter {
     @Override
     public void onShutdown(@NotNull ShutdownEvent e) {
         System.exit(0);
+    }
+
+    @Override
+    public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent e) {
+        String cmd = e.getName();
+        if (cmd.equalsIgnoreCase(RegisterCommands.Ban)) {
+            System.out.println(e.getFocusedOption().getName());
+            if (e.getFocusedOption().equals(e.getOption(RegisterCommands.BanOptionTime))) {
+                e.getInteraction().replyChoices(
+                        new Command.Choice("Permanent", 9),
+                        new Command.Choice("3 Tag", 3),
+                        new Command.Choice("1 Tag", 1),
+                        new Command.Choice("3 Stunden", 3),
+                        new Command.Choice("1 Stunde", 1),
+                        new Command.Choice("30 Minuten", 3),
+                        new Command.Choice("1 Tag", 1)
+                ).queue();
+            }
+        }
+    }
+
+    @Override
+    public void onUserContextInteraction(UserContextInteractionEvent e) {
+        String cmd = e.getName();
+        System.out.println(e.getName());
     }
 }
