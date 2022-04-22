@@ -1,5 +1,6 @@
 package de.goldendeveloper.guildmanager.events;
 
+import de.goldendeveloper.guildmanager.CreateMysql;
 import de.goldendeveloper.guildmanager.Main;
 import de.goldendeveloper.mysql.entities.Table;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -21,14 +22,14 @@ public class Events extends ListenerAdapter {
 
     @Override
     public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent e) {
-        if (Main.getMysql().existsDatabase(Main.dbName)) {
-            if (Main.getMysql().getDatabase(Main.dbName).existsTable(Main.settingsTName)) {
-                Table table = Main.getMysql().getDatabase(Main.dbName).getTable(Main.settingsTName);
-                if (table.existsColumn(Main.colmGuild)) {
-                    if (table.getColumn(Main.colmGuild).getAll().contains(e.getGuild().getId())) {
-                        HashMap<String, Object> row = table.getRow(table.getColumn(Main.colmGuild), e.getGuild().getId());
-                        if (!row.get(Main.colmWChannel).toString().isEmpty() || !row.get(Main.colmWChannel).toString().isBlank()) {
-                            TextChannel ch = e.getGuild().getTextChannelById(row.get(Main.colmWChannel).toString());
+        if (Main.getCreateMysql().getMysql().existsDatabase(CreateMysql.dbName)) {
+            if (Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).existsTable(CreateMysql.settingsTName)) {
+                Table table = Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).getTable(CreateMysql.settingsTName);
+                if (table.existsColumn(CreateMysql.colmGuild)) {
+                    if (table.getColumn(CreateMysql.colmGuild).getAll().contains(e.getGuild().getId())) {
+                        HashMap<String, Object> row = table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId());
+                        if (!row.get(CreateMysql.colmWChannel).toString().isEmpty() || !row.get(CreateMysql.colmWChannel).toString().isBlank()) {
+                            TextChannel ch = e.getGuild().getTextChannelById(row.get(CreateMysql.colmWChannel).toString());
                             if (ch != null) {
                                 User user = e.getMember().getUser();
                                 String ServerName = e.getGuild().getName();
@@ -55,8 +56,8 @@ public class Events extends ListenerAdapter {
                                     });
                                 }
                             }
-                        } else if (!row.get(Main.colmJRole).toString().isEmpty() || !row.get(Main.colmJRole).toString().isBlank()) {
-                            Role role = e.getGuild().getRoleById(row.get(Main.colmJRole).toString());
+                        } else if (!row.get(CreateMysql.colmJRole).toString().isEmpty() || !row.get(CreateMysql.colmJRole).toString().isBlank()) {
+                            Role role = e.getGuild().getRoleById(row.get(CreateMysql.colmJRole).toString());
                             Member bot = e.getGuild().getMember(e.getJDA().getSelfUser());
                             if (role != null) {
                                 if (bot != null && bot.canInteract(role)) {
@@ -98,22 +99,22 @@ public class Events extends ListenerAdapter {
 
     @Override
     public void onSelectMenuInteraction(@NotNull SelectMenuInteractionEvent event) {
-        if (Main.getMysql().existsDatabase(Main.dbName)) {
-            if (Main.getMysql().getDatabase(Main.dbName).existsTable(Main.settingsTName)) {
-                Table table = Main.getMysql().getDatabase(Main.dbName).getTable(Main.settingsTName);
-                if (table.existsColumn(Main.colmGuild)) {
-                    HashMap<String, Object> row = table.getRow(table.getColumn(Main.colmGuild), event.getGuild().getId());
+        if (Main.getCreateMysql().getMysql().existsDatabase(CreateMysql.dbName)) {
+            if (Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).existsTable(CreateMysql.settingsTName)) {
+                Table table = Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).getTable(CreateMysql.settingsTName);
+                if (table.existsColumn(CreateMysql.colmGuild)) {
+                    HashMap<String, Object> row = table.getRow(table.getColumn(CreateMysql.colmGuild), event.getGuild().getId());
                     for (SelectOption option : event.getSelectedOptions()) {
                         if (option.getValue().equalsIgnoreCase(RegisterCommands.settingsSupJoinRole)) {
-                            if (!row.get(Main.colmJRole).toString().isEmpty()) {
-                                table.getColumn(Main.colmJRole).set("", Integer.parseInt(row.get("id").toString()));
+                            if (!row.get(CreateMysql.colmJRole).toString().isEmpty()) {
+                                table.getColumn(CreateMysql.colmJRole).set("", Integer.parseInt(row.get("id").toString()));
                                 event.getInteraction().reply("Die Einstellung für die Join Rolle wurde entfernt").queue();
                             } else {
                                 event.getInteraction().reply("Es ist keine Einstellung mit dieser Option vorhanden!").queue();
                             }
                         } else if (option.getValue().equalsIgnoreCase(RegisterCommands.settingsSupWMessage)) {
-                            if (!row.get(Main.colmWChannel).toString().isEmpty()) {
-                                table.getColumn(Main.colmWChannel).set("", Integer.parseInt(row.get("id").toString()));
+                            if (!row.get(CreateMysql.colmWChannel).toString().isEmpty()) {
+                                table.getColumn(CreateMysql.colmWChannel).set("", Integer.parseInt(row.get("id").toString()));
                                 event.getInteraction().reply("Die Einstellung für die Willkommens Nachricht wurde entfernt").queue();
                             } else {
                                 event.getInteraction().reply("Es ist keine Einstellung mit dieser Option vorhanden!").queue();

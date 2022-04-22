@@ -3,11 +3,13 @@ package de.goldendeveloper.guildmanager.events;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
+import de.goldendeveloper.guildmanager.CreateMysql;
 import de.goldendeveloper.guildmanager.ID;
 import de.goldendeveloper.guildmanager.Main;
 import de.goldendeveloper.mysql.entities.Row;
 import de.goldendeveloper.mysql.entities.Table;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -24,6 +26,8 @@ import java.util.concurrent.TimeUnit;
 
 public class RegisterCommands extends ListenerAdapter {
 
+    public static String _Coho04_MEMBER = "513306244371447828";
+    public static String hasNoPermissions = "[ERROR]: Für den Command hast du nicht genügend Rechte";
     public static final String Ban = "ban";
     public static final String BanOptionTime = "time";
     public static final String BanOptionUser = "user";
@@ -52,10 +56,8 @@ public class RegisterCommands extends ListenerAdapter {
     public static final String TimeOutOptionTime = "time";
     public static final String ServerStats = "server-stats";
     public static final String BotStats = "bot-stats";
-
     public static final String Clear = "clear";
     public static final String ClearOptionAmount = "anzahl";
-
     public static final String CmdShutdown = "shutdown";
     public static final String CmdRestart = "restart";
 
@@ -79,9 +81,12 @@ public class RegisterCommands extends ListenerAdapter {
             case Error_report -> this.ErrorReport(e);
             case Join_Channel -> this.ChannelJoin(e);
             case Leave_Channel -> this.ChannelLeave(e);
-            case Donate -> e.getInteraction().reply("Wenn du uns etwas Spenden möchtest dann kannst du dies gerne in dem du unten auf den Button kickst machen! \n" + "Vielen Danke <3 !").addActionRow(Button.link("https://donate.golden-developer.de/", "Zur Spende")).queue();
-            case Bot_Owner -> e.getInteraction().reply("Der Bot Owner ist die Organisation Golden-Developer").addActionRow(Button.link("https://dc.golden-developer.de/", "Zum Server")).queue();
-            case Join -> e.getInteraction().reply("Mit dem Button kannst du mich auf deinen Server einladen!").addActionRow(Button.link(e.getJDA().setRequiredScopes("applications.commands").getInviteUrl(Permission.ADMINISTRATOR), "Hier Klicken")).queue();
+            case Donate ->
+                    e.getInteraction().reply("Wenn du uns etwas Spenden möchtest dann kannst du dies gerne in dem du unten auf den Button kickst machen! \n" + "Vielen Danke <3 !").addActionRow(Button.link("https://donate.golden-developer.de/", "Zur Spende")).queue();
+            case Bot_Owner ->
+                    e.getInteraction().reply("Der Bot Owner ist die Organisation Golden-Developer").addActionRow(Button.link("https://dc.golden-developer.de/", "Zum Server")).queue();
+            case Join ->
+                    e.getInteraction().reply("Mit dem Button kannst du mich auf deinen Server einladen!").addActionRow(Button.link(e.getJDA().setRequiredScopes("applications.commands").getInviteUrl(Permission.ADMINISTRATOR), "Hier Klicken")).queue();
             case settings -> this.Settings(e);
         }
     }
@@ -97,64 +102,64 @@ public class RegisterCommands extends ListenerAdapter {
                         member.timeoutFor(time, TimeUnit.MINUTES).queue();
                         e.getInteraction().reply("Der User " + member.getUser().getName() + " hat erfolgreich einen timeout bekommen!").queue();
                     } else {
-                        e.getInteraction().reply(ID.hasError("Timeout Dauer is 0")).queue();
+                        e.getInteraction().reply(hasError("Timeout Dauer is 0")).queue();
                     }
                 } else {
-                    e.getInteraction().reply(ID.hasError("User ist NULL")).queue();
+                    e.getInteraction().reply(hasError("User ist NULL")).queue();
                 }
             } else {
-                e.getInteraction().reply(ID.hasNoPermissions).queue();
+                e.getInteraction().reply(hasNoPermissions).queue();
             }
         } else {
-            e.getInteraction().reply(ID.hasError("CMD User ist NULL")).queue();
+            e.getInteraction().reply(hasError("CMD User ist NULL")).queue();
         }
     }
 
     public void Settings(SlashCommandInteractionEvent e) {
         if (e.getMember().hasPermission(Permission.ADMINISTRATOR)) {
             if (e.getSubcommandName().equalsIgnoreCase(RegisterCommands.settingsSupJoinRole)) {
-                if (Main.getMysql().existsDatabase(Main.dbName)) {
-                    if (Main.getMysql().getDatabase(Main.dbName).existsTable(Main.settingsTName)) {
-                        Table table = Main.getMysql().getDatabase(Main.dbName).getTable(Main.settingsTName);
-                        if (table.existsColumn(Main.colmGuild)) {
+                if (Main.getCreateMysql().getMysql().existsDatabase(CreateMysql.dbName)) {
+                    if (Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).existsTable(CreateMysql.settingsTName)) {
+                        Table table = Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).getTable(CreateMysql.settingsTName);
+                        if (table.existsColumn(CreateMysql.colmGuild)) {
                             Role role = e.getOption(RegisterCommands.settingsSupJoinRoleOptionRole).getAsRole();
-                            if (table.getColumn(Main.colmGuild).getAll().contains(e.getGuild().getId())) {
-                                HashMap<String, Object> row = table.getRow(table.getColumn(Main.colmGuild), e.getGuild().getId());
-                                table.getColumn(Main.colmJRole).set(role.getId(), Integer.parseInt(row.get("id").toString()));
+                            if (table.getColumn(CreateMysql.colmGuild).getAll().contains(e.getGuild().getId())) {
+                                HashMap<String, Object> row = table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId());
+                                table.getColumn(CreateMysql.colmJRole).set(role.getId(), Integer.parseInt(row.get("id").toString()));
                                 e.getInteraction().reply("Die Rolle fürs joinen wurde erfolgreich gesetzt!").queue();
                             } else {
                                 table.insert(new Row(table, table.getDatabase())
-                                        .with(Main.colmGuild, e.getGuild().getId())
-                                        .with(Main.colmJRole, role.getId())
-                                        .with(Main.colmWChannel, "")
+                                        .with(CreateMysql.colmGuild, e.getGuild().getId())
+                                        .with(CreateMysql.colmJRole, role.getId())
+                                        .with(CreateMysql.colmWChannel, "")
                                 );
                                 e.getInteraction().reply("Die Rolle fürs joinen wurde erfolgreich gesetzt!").queue();
                             }
                         } else {
-                            Main.getDiscord().sendErrorMessage("Column " + Main.colmGuild + " in " + Main.settingsTName + " existiert nicht");
+                            Main.getDiscord().sendErrorMessage("Column " + CreateMysql.colmGuild + " in " + CreateMysql.settingsTName + " existiert nicht");
                         }
                     } else {
-                        Main.getDiscord().sendErrorMessage("Table " + Main.settingsTName + " in " + Main.dbName + " existiert nicht");
+                        Main.getDiscord().sendErrorMessage("Table " + CreateMysql.settingsTName + " in " + CreateMysql.dbName + " existiert nicht");
                     }
                 } else {
-                    Main.getDiscord().sendErrorMessage("Database " + Main.dbName + " existiert nicht");
+                    Main.getDiscord().sendErrorMessage("Database " + CreateMysql.dbName + " existiert nicht");
                 }
             } else if (e.getSubcommandName().equalsIgnoreCase(RegisterCommands.settingsSupWMessage)) {
-                if (Main.getMysql().existsDatabase(Main.dbName)) {
-                    if (Main.getMysql().getDatabase(Main.dbName).existsTable(Main.settingsTName)) {
-                        Table table = Main.getMysql().getDatabase(Main.dbName).getTable(Main.settingsTName);
-                        if (table.existsColumn(Main.colmGuild)) {
+                if (Main.getCreateMysql().getMysql().existsDatabase(CreateMysql.dbName)) {
+                    if (Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).existsTable(CreateMysql.settingsTName)) {
+                        Table table = Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).getTable(CreateMysql.settingsTName);
+                        if (table.existsColumn(CreateMysql.colmGuild)) {
                             TextChannel channel = e.getOption(RegisterCommands.settingsSupWMessageOptionChannel).getAsTextChannel();
                             if (channel != null) {
-                                if (table.getColumn(Main.colmGuild).getAll().contains(e.getGuild().getId())) {
-                                    HashMap<String, Object> row = table.getRow(table.getColumn(Main.colmGuild), e.getGuild().getId());
-                                    table.getColumn(Main.colmWChannel).set(channel.getId(), Integer.parseInt(row.get("id").toString()));
+                                if (table.getColumn(CreateMysql.colmGuild).getAll().contains(e.getGuild().getId())) {
+                                    HashMap<String, Object> row = table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId());
+                                    table.getColumn(CreateMysql.colmWChannel).set(channel.getId(), Integer.parseInt(row.get("id").toString()));
                                     e.getInteraction().reply("Der Channel für die Willkommens Nachricht wurde erfolgreich gesetzt!").queue();
                                 } else {
                                     table.insert(new Row(table, table.getDatabase())
-                                            .with(Main.colmGuild, e.getGuild().getId())
-                                            .with(Main.colmJRole, "")
-                                            .with(Main.colmWChannel, channel.getId())
+                                            .with(CreateMysql.colmGuild, e.getGuild().getId())
+                                            .with(CreateMysql.colmJRole, "")
+                                            .with(CreateMysql.colmWChannel, channel.getId())
                                     );
                                     e.getInteraction().reply("Der Channel für die Willkommens Nachricht wurde erfolgreich gesetzt!").queue();
                                 }
@@ -162,13 +167,13 @@ public class RegisterCommands extends ListenerAdapter {
                                 e.getInteraction().reply("Der Angegebene Channel konnte nicht gefunden werden!").queue();
                             }
                         } else {
-                            Main.getDiscord().sendErrorMessage("Column " + Main.colmGuild + " in " + Main.settingsTName + " existiert nicht");
+                            Main.getDiscord().sendErrorMessage("Column " + CreateMysql.colmGuild + " in " + CreateMysql.settingsTName + " existiert nicht");
                         }
                     } else {
-                        Main.getDiscord().sendErrorMessage("Table " + Main.settingsTName + " in " + Main.dbName + " existiert nicht");
+                        Main.getDiscord().sendErrorMessage("Table " + CreateMysql.settingsTName + " in " + CreateMysql.dbName + " existiert nicht");
                     }
                 } else {
-                    Main.getDiscord().sendErrorMessage("Database " + Main.dbName + " existiert nicht");
+                    Main.getDiscord().sendErrorMessage("Database " + CreateMysql.dbName + " existiert nicht");
                 }
             } else if (e.getSubcommandName().equalsIgnoreCase(RegisterCommands.settingsSupRemove)) {
                 EmbedBuilder builder = new EmbedBuilder();
@@ -182,7 +187,7 @@ public class RegisterCommands extends ListenerAdapter {
                 ).queue();
             }
         } else {
-            e.getInteraction().reply(ID.hasNoPermissions).queue();
+            e.getInteraction().reply(hasNoPermissions).queue();
         }
     }
 
@@ -204,13 +209,13 @@ public class RegisterCommands extends ListenerAdapter {
                         e.getInteraction().reply("Der User " + member.getUser().getName() + " wurde erfolgreich gekickt!").queue();
                     }
                 } else {
-                    e.getInteraction().reply(ID.hasError("User ist NULL")).queue();
+                    e.getInteraction().reply(hasError("User ist NULL")).queue();
                 }
             } else {
-                e.getInteraction().reply(ID.hasNoPermissions).queue();
+                e.getInteraction().reply(hasNoPermissions).queue();
             }
         } else {
-            e.getInteraction().reply(ID.hasError("CMD User ist NULL")).queue();
+            e.getInteraction().reply(hasError("CMD User ist NULL")).queue();
         }
     }
 
@@ -236,7 +241,7 @@ public class RegisterCommands extends ListenerAdapter {
                     }
                 }
             } else {
-                e.getInteraction().reply(ID.hasError("CMD User ist NULL")).queue();
+                e.getInteraction().reply(hasError("CMD User ist NULL")).queue();
             }
         }
     }
@@ -261,21 +266,21 @@ public class RegisterCommands extends ListenerAdapter {
                             e.getInteraction().reply("Der User " + member.getUser().getName() + " wurde erfolgreich gebannt!").queue();
                         }
                     } else {
-                        e.getInteraction().reply(ID.hasError("User ist NULL")).queue();
+                        e.getInteraction().reply(hasError("User ist NULL")).queue();
                     }
                 } else {
-                    e.getInteraction().reply(ID.hasError("Zeit ist NULL")).queue();
+                    e.getInteraction().reply(hasError("Zeit ist NULL")).queue();
                 }
             } else {
-                e.getInteraction().reply(ID.hasNoPermissions).queue();
+                e.getInteraction().reply(hasNoPermissions).queue();
             }
         } else {
-            e.getInteraction().reply(ID.hasError("CMD User ist NULL")).queue();
+            e.getInteraction().reply(hasError("CMD User ist NULL")).queue();
         }
     }
 
     public void Shutdown(SlashCommandInteractionEvent e) {
-        User _Coho04_ = e.getJDA().getUserById("513306244371447828");
+        User _Coho04_ = e.getJDA().getUserById(_Coho04_MEMBER);
         User zRazzer = e.getJDA().getUserById("428811057700536331");
         if (e.getUser() == zRazzer || e.getUser() == _Coho04_) {
             WebhookEmbedBuilder embed = new WebhookEmbedBuilder();
@@ -292,7 +297,7 @@ public class RegisterCommands extends ListenerAdapter {
     }
 
     public void Restart(SlashCommandInteractionEvent e) {
-        User _Coho04_ = e.getJDA().getUserById("513306244371447828");
+        User _Coho04_ = e.getJDA().getUserById(_Coho04_MEMBER);
         User zRazzer = e.getJDA().getUserById("428811057700536331");
         if (e.getUser() == zRazzer || e.getUser() == _Coho04_) {
             try {
@@ -321,7 +326,7 @@ public class RegisterCommands extends ListenerAdapter {
                     .addActionRow(Button.link(g.getTextChannelById(747208323761176586L).createInvite().complete().getUrl(), "Zum Server"))
                     .queue();
         } else {
-            e.getInteraction().reply(ID.hasError("Guild is NULL")).queue();
+            e.getInteraction().reply(hasError("Guild is NULL")).queue();
         }
     }
 
@@ -352,10 +357,10 @@ public class RegisterCommands extends ListenerAdapter {
         embedBuilder.setFooter("@Golden-Developer", e.getJDA().getSelfUser().getAvatarUrl());
         embedBuilder.setColor(Color.MAGENTA);
         embedBuilder.addField("Alle Users", String.valueOf(e.getGuild().getMembers().size()), true);
-        embedBuilder.addField("Online Users", String.valueOf(ID.getOnlineUsers(e.getGuild())), true);
-        embedBuilder.addField("Offline Users", String.valueOf(ID.getOfflineUsers(e.getGuild())), true);
-        embedBuilder.addField("AFK Users", String.valueOf(ID.getAfkUsers(e.getGuild())), true);
-        embedBuilder.addField("Nicht Stören Users", String.valueOf(ID.getDoNotDisturbUsers(e.getGuild())), true);
+        embedBuilder.addField("Online Users", String.valueOf(getOnlineUsers(e.getGuild())), true);
+        embedBuilder.addField("Offline Users", String.valueOf(getOfflineUsers(e.getGuild())), true);
+        embedBuilder.addField("AFK Users", String.valueOf(getAfkUsers(e.getGuild())), true);
+        embedBuilder.addField("Nicht Stören Users", String.valueOf(getDoNotDisturbUsers(e.getGuild())), true);
         embedBuilder.addField("Channel", String.valueOf(e.getGuild().getChannels().size()), true);
         embedBuilder.addField("TextChannel", String.valueOf(e.getGuild().getTextChannels().size()), true);
         embedBuilder.addField("VoiceChannel", String.valueOf(e.getGuild().getVoiceChannels().size()), true);
@@ -370,7 +375,7 @@ public class RegisterCommands extends ListenerAdapter {
         embed.setFooter("@Golden-Developer", e.getJDA().getSelfUser().getAvatarUrl());
         embed.setColor(Color.MAGENTA);
         embed.addField("Server", String.valueOf(e.getJDA().getGuilds().size()), true);
-        embed.addField("Support-Server", MainServer.getName() , true);
+        embed.addField("Support-Server", MainServer.getName(), true);
         embed.addField("Bot-Owner", "@Golden-Developer", true);
         e.getInteraction().replyEmbeds(embed.build()).addActionRow(Button.link(MainServer.getDefaultChannel().createInvite().complete().getUrl(), MainServer.getName())).queue();
     }
@@ -380,7 +385,7 @@ public class RegisterCommands extends ListenerAdapter {
         if (member != null) {
             User u = e.getOption("user").getAsUser();
             if (e.getOption("private").getAsBoolean()) {
-                u.openPrivateChannel().queue(msg->{
+                u.openPrivateChannel().queue(msg -> {
                     msg.sendMessage("Herzlichen Glückwunsch zum Geburtstag wünscht dir " + member.getUser().getName() + ". Viel Spaß dir heute!!!").queue();
                 });
             } else {
@@ -388,7 +393,7 @@ public class RegisterCommands extends ListenerAdapter {
             }
             e.getInteraction().reply("Dem User wurde erfolgreich gratuliert!").queue();
         } else {
-            e.getInteraction().reply(ID.hasError("CMD Member ist NULL")).queue();
+            e.getInteraction().reply(hasError("CMD Member ist NULL")).queue();
         }
     }
 
@@ -400,42 +405,41 @@ public class RegisterCommands extends ListenerAdapter {
                 if (m != null) {
                     User u = m.getUser();
                     if (!u.getName().isEmpty()) {
-                        e.getInteraction().reply(e.getGuild().getOwner().getUser().getName()).queue();
+                        e.getInteraction().reply("Der Serverinhaber ist: " + e.getGuild().getOwner().getUser().getName()).queue();
                     } else {
-                        e.getInteraction().reply(ID.hasError("Owner Name ist NULL")).queue();
+                        e.getInteraction().reply(hasError("Owner Name ist NULL")).queue();
                     }
                 } else {
-                    e.getInteraction().reply(ID.hasError("Owner Member ist NULL")).queue();
+                    e.getInteraction().reply(hasError("Owner Member ist NULL")).queue();
                 }
             } else {
-                e.getInteraction().reply(ID.hasError("Owner ist NULL")).queue();
+                e.getInteraction().reply(hasError("Owner ist NULL")).queue();
             }
         } else {
-            e.getInteraction().reply(ID.hasError("Guild ist NULL")).queue();
+            e.getInteraction().reply(hasError("Guild ist NULL")).queue();
         }
     }
 
     public void ErrorReport(SlashCommandInteractionEvent e) {
         Member m = e.getMember();
         if (m != null) {
-            User c = e.getJDA().getUserById(ID._Coho04_MEMBER);
+            User c = e.getJDA().getUserById(_Coho04_MEMBER);
             if (c != null) {
-                c.openPrivateChannel().queue(msg->{
-                    MessageEmbed embed = new EmbedBuilder()
-                            .setTitle(e.getUser().getName())
-                            .setImage(e.getUser().getAvatarUrl())
-                            .addField("ERROR", e.getOption("error").getAsString(), true)
-                            .build();
-                    msg.sendMessageEmbeds(embed).queue();
+                c.openPrivateChannel().queue(msg -> {
+                    EmbedBuilder embed = new EmbedBuilder();
+                    embed.setTitle(e.getUser().getName());
+                    embed.setImage(e.getUser().getAvatarUrl());
+                    embed.addField("ERROR", e.getOption("error").getAsString(), true);
+                    msg.sendMessageEmbeds(embed.build()).queue();
                 });
                 e.getInteraction().reply("Dein Report wurde erfolgreich abgesendet").queue();
             } else {
-                e.getInteraction().reply(ID.hasError("_Coho04_ is NULL")).queue();
+                e.getInteraction().reply(hasError("_Coho04_ is NULL")).queue();
             }
         }
     }
 
-    public void  ChannelLeave(SlashCommandInteractionEvent e) {
+    public void ChannelLeave(SlashCommandInteractionEvent e) {
         Member m = e.getMember();
         if (m != null) {
             Guild g = e.getGuild();
@@ -447,19 +451,19 @@ public class RegisterCommands extends ListenerAdapter {
                             e.getJDA().getDirectAudioController().disconnect(g);
                             e.getInteraction().reply("Ich habe erfolgreich deinen Channel verlassen!").queue();
                         } else {
-                            e.getInteraction().reply(ID.hasError("Du bist in keinem VoiceChannel!")).queue();
+                            e.getInteraction().reply(hasError("Du bist in keinem VoiceChannel!")).queue();
                         }
                     } else {
-                        e.getInteraction().reply(ID.hasError("Voice Channel is NULL")).queue();
+                        e.getInteraction().reply(hasError("Voice Channel is NULL")).queue();
                     }
                 } else {
-                    e.getInteraction().reply(ID.hasError("VoiceState is NULL")).queue();
+                    e.getInteraction().reply(hasError("VoiceState is NULL")).queue();
                 }
             } else {
-                e.getInteraction().reply(ID.hasError("Guild is NULL")).queue();
+                e.getInteraction().reply(hasError("Guild is NULL")).queue();
             }
         } else {
-            e.getInteraction().reply(ID.hasError("MEMBER is NULL")).queue();
+            e.getInteraction().reply(hasError("MEMBER is NULL")).queue();
         }
     }
 
@@ -473,16 +477,61 @@ public class RegisterCommands extends ListenerAdapter {
                         e.getJDA().getDirectAudioController().connect(voice.getChannel());
                         e.getInteraction().reply("Ich habe erfolgreich deinen Channel betreten!").queue();
                     } else {
-                        e.getInteraction().reply(ID.hasError("Du bist in keinem VoiceChannel!")).queue();
+                        e.getInteraction().reply(hasError("Du bist in keinem VoiceChannel!")).queue();
                     }
                 } else {
-                    e.getInteraction().reply(ID.hasError("Voice Channel is NULL")).queue();
+                    e.getInteraction().reply(hasError("Voice Channel is NULL")).queue();
                 }
             } else {
-                e.getInteraction().reply(ID.hasError("VoiceState is NULL")).queue();
+                e.getInteraction().reply(hasError("VoiceState is NULL")).queue();
             }
         } else {
-            e.getInteraction().reply(ID.hasError("Member is NULL")).queue();
+            e.getInteraction().reply(hasError("Member is NULL")).queue();
         }
+    }
+
+    public static int getOnlineUsers(Guild guild) {
+        int onlineMembers = 0;
+        for (Member m : guild.getMembers()) {
+            if (m.getOnlineStatus() != OnlineStatus.OFFLINE && m.getOnlineStatus() != OnlineStatus.INVISIBLE) {
+                onlineMembers++;
+            }
+        }
+        return onlineMembers;
+    }
+
+    public static int getDoNotDisturbUsers(Guild guild) {
+        int doNotDisturbMembers = 0;
+        for (Member m : guild.getMembers()) {
+            if (m.getOnlineStatus() == OnlineStatus.DO_NOT_DISTURB) {
+                doNotDisturbMembers++;
+            }
+        }
+        return doNotDisturbMembers;
+    }
+
+    public static int getAfkUsers(Guild guild) {
+        int afkMembers = 0;
+        for (Member m : guild.getMembers()) {
+            if (m.getOnlineStatus() != OnlineStatus.OFFLINE && m.getOnlineStatus() != OnlineStatus.INVISIBLE) {
+                afkMembers++;
+            }
+        }
+        return afkMembers;
+    }
+
+    public static int getOfflineUsers(Guild guild) {
+        int OfflineMembers = 0;
+        for (Member m : guild.getMembers()) {
+            if (m.getOnlineStatus() == OnlineStatus.OFFLINE) {
+                OfflineMembers++;
+            }
+        }
+        return OfflineMembers;
+    }
+
+
+    public static String hasError(String error) {
+        return "[ERROR]: Es ist ein Fehler aufgetreten bitte melden den Grund mit /error-report \n" + "Fehler: " + error;
     }
 }
