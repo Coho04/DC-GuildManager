@@ -4,9 +4,8 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import de.goldendeveloper.guildmanager.CreateMysql;
-import de.goldendeveloper.guildmanager.ID;
 import de.goldendeveloper.guildmanager.Main;
-import de.goldendeveloper.mysql.entities.Row;
+import de.goldendeveloper.mysql.entities.RowBuilder;
 import de.goldendeveloper.mysql.entities.Table;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -124,14 +123,14 @@ public class RegisterCommands extends ListenerAdapter {
                         if (table.existsColumn(CreateMysql.colmGuild)) {
                             Role role = e.getOption(RegisterCommands.settingsSupJoinRoleOptionRole).getAsRole();
                             if (table.getColumn(CreateMysql.colmGuild).getAll().contains(e.getGuild().getId())) {
-                                HashMap<String, Object> row = table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId());
-                                table.getColumn(CreateMysql.colmJRole).set(role.getId(), Integer.parseInt(row.get("id").toString()));
+                                table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId()).set(table.getColumn(CreateMysql.colmJRole), role.getId());
                                 e.getInteraction().reply("Die Rolle fürs joinen wurde erfolgreich gesetzt!").queue();
                             } else {
-                                table.insert(new Row(table, table.getDatabase())
-                                        .with(CreateMysql.colmGuild, e.getGuild().getId())
-                                        .with(CreateMysql.colmJRole, role.getId())
-                                        .with(CreateMysql.colmWChannel, "")
+                                table.insert(new RowBuilder()
+                                        .with(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId())
+                                        .with(table.getColumn(CreateMysql.colmJRole), role.getId())
+                                        .with(table.getColumn(CreateMysql.colmWChannel), "")
+                                        .build()
                                 );
                                 e.getInteraction().reply("Die Rolle fürs joinen wurde erfolgreich gesetzt!").queue();
                             }
@@ -152,14 +151,15 @@ public class RegisterCommands extends ListenerAdapter {
                             TextChannel channel = e.getOption(RegisterCommands.settingsSupWMessageOptionChannel).getAsTextChannel();
                             if (channel != null) {
                                 if (table.getColumn(CreateMysql.colmGuild).getAll().contains(e.getGuild().getId())) {
-                                    HashMap<String, Object> row = table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId());
-                                    table.getColumn(CreateMysql.colmWChannel).set(channel.getId(), Integer.parseInt(row.get("id").toString()));
+                                    HashMap<String, Object> row = table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId()).get();
+                                    table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId()).set(table.getColumn(CreateMysql.colmWChannel), channel.getId());
                                     e.getInteraction().reply("Der Channel für die Willkommens Nachricht wurde erfolgreich gesetzt!").queue();
                                 } else {
-                                    table.insert(new Row(table, table.getDatabase())
-                                            .with(CreateMysql.colmGuild, e.getGuild().getId())
-                                            .with(CreateMysql.colmJRole, "")
-                                            .with(CreateMysql.colmWChannel, channel.getId())
+                                    table.insert(new RowBuilder()
+                                            .with(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId())
+                                            .with(table.getColumn(CreateMysql.colmJRole), "")
+                                            .with(table.getColumn(CreateMysql.colmWChannel), channel.getId())
+                                            .build()
                                     );
                                     e.getInteraction().reply("Der Channel für die Willkommens Nachricht wurde erfolgreich gesetzt!").queue();
                                 }

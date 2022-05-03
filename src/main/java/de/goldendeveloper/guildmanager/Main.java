@@ -8,8 +8,8 @@ public class Main {
 
     public static void main(String[] args) {
         config = new Config();
-        discord = new Discord(config.getDiscordToken());
         createMYSQl = new CreateMysql(config.getMysqlHostname(), config.getMysqlUsername(), config.getMysqlPassword(), config.getMysqlPort());
+        discord = new Discord(config.getDiscordToken());
     }
 
     public static Discord getDiscord() {

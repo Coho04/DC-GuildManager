@@ -27,7 +27,7 @@ public class Events extends ListenerAdapter {
                 Table table = Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).getTable(CreateMysql.settingsTName);
                 if (table.existsColumn(CreateMysql.colmGuild)) {
                     if (table.getColumn(CreateMysql.colmGuild).getAll().contains(e.getGuild().getId())) {
-                        HashMap<String, Object> row = table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId());
+                        HashMap<String, Object> row = table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId()).get();
                         if (!row.get(CreateMysql.colmWChannel).toString().isEmpty() || !row.get(CreateMysql.colmWChannel).toString().isBlank()) {
                             TextChannel ch = e.getGuild().getTextChannelById(row.get(CreateMysql.colmWChannel).toString());
                             if (ch != null) {
@@ -103,18 +103,18 @@ public class Events extends ListenerAdapter {
             if (Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).existsTable(CreateMysql.settingsTName)) {
                 Table table = Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).getTable(CreateMysql.settingsTName);
                 if (table.existsColumn(CreateMysql.colmGuild)) {
-                    HashMap<String, Object> row = table.getRow(table.getColumn(CreateMysql.colmGuild), event.getGuild().getId());
+                    HashMap<String, Object> row = table.getRow(table.getColumn(CreateMysql.colmGuild), event.getGuild().getId()).get();
                     for (SelectOption option : event.getSelectedOptions()) {
                         if (option.getValue().equalsIgnoreCase(RegisterCommands.settingsSupJoinRole)) {
                             if (!row.get(CreateMysql.colmJRole).toString().isEmpty()) {
-                                table.getColumn(CreateMysql.colmJRole).set("", Integer.parseInt(row.get("id").toString()));
+                                table.getRow(table.getColumn(CreateMysql.colmGuild), event.getGuild().getId()).set(table.getColumn(CreateMysql.colmJRole), "");
                                 event.getInteraction().reply("Die Einstellung für die Join Rolle wurde entfernt").queue();
                             } else {
                                 event.getInteraction().reply("Es ist keine Einstellung mit dieser Option vorhanden!").queue();
                             }
                         } else if (option.getValue().equalsIgnoreCase(RegisterCommands.settingsSupWMessage)) {
                             if (!row.get(CreateMysql.colmWChannel).toString().isEmpty()) {
-                                table.getColumn(CreateMysql.colmWChannel).set("", Integer.parseInt(row.get("id").toString()));
+                                table.getRow(table.getColumn(CreateMysql.colmGuild), event.getGuild().getId()).set(table.getColumn(CreateMysql.colmWChannel), "");
                                 event.getInteraction().reply("Die Einstellung für die Willkommens Nachricht wurde entfernt").queue();
                             } else {
                                 event.getInteraction().reply("Es ist keine Einstellung mit dieser Option vorhanden!").queue();
@@ -152,7 +152,6 @@ public class Events extends ListenerAdapter {
 
     @Override
     public void onUserContextInteraction(UserContextInteractionEvent e) {
-        String cmd = e.getName();
         System.out.println(e.getName());
     }
 }
