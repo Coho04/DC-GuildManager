@@ -80,12 +80,9 @@ public class RegisterCommands extends ListenerAdapter {
             case Error_report -> this.ErrorReport(e);
             case Join_Channel -> this.ChannelJoin(e);
             case Leave_Channel -> this.ChannelLeave(e);
-            case Donate ->
-                    e.getInteraction().reply("Wenn du uns etwas Spenden möchtest dann kannst du dies gerne in dem du unten auf den Button kickst machen! \n" + "Vielen Danke <3 !").addActionRow(Button.link("https://donate.golden-developer.de/", "Zur Spende")).queue();
-            case Bot_Owner ->
-                    e.getInteraction().reply("Der Bot Owner ist die Organisation Golden-Developer").addActionRow(Button.link("https://dc.golden-developer.de/", "Zum Server")).queue();
-            case Join ->
-                    e.getInteraction().reply("Mit dem Button kannst du mich auf deinen Server einladen!").addActionRow(Button.link(e.getJDA().setRequiredScopes("applications.commands").getInviteUrl(Permission.ADMINISTRATOR), "Hier Klicken")).queue();
+            case Donate -> e.getInteraction().reply("Wenn du uns etwas Spenden möchtest dann kannst du dies gerne in dem du unten auf den Button kickst machen! \n" + "Vielen Danke <3 !").addActionRow(Button.link("https://donate.golden-developer.de/", "Zur Spende")).queue();
+            case Bot_Owner -> e.getInteraction().reply("Der Bot Owner ist die Organisation Golden-Developer").addActionRow(Button.link("https://dc.golden-developer.de/", "Zum Server")).queue();
+            case Join -> e.getInteraction().reply("Mit dem Button kannst du mich auf deinen Server einladen!").addActionRow(Button.link(e.getJDA().setRequiredScopes("applications.commands").getInviteUrl(Permission.ADMINISTRATOR), "Hier Klicken")).queue();
             case settings -> this.Settings(e);
         }
     }
