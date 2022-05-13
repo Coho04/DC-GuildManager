@@ -1,3 +1,4 @@
 # Project exclude paths
 /target/
 /src/main/resources/Login.xml
+.idea
