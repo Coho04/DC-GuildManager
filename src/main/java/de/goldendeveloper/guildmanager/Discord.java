@@ -7,6 +7,7 @@ import de.goldendeveloper.guildmanager.events.Events;
 import de.goldendeveloper.guildmanager.events.RegisterCommands;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -45,7 +46,9 @@ public class Discord {
                     .setContextEnabled(true)
                     .build().awaitReady();
             registerCommand();
-            Online();
+            if (!System.getProperty("os.name").split(" ")[0].equalsIgnoreCase("windows")) {
+                Online();
+            }
         } catch (LoginException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -111,7 +114,7 @@ public class Discord {
     private String getProjektVersion() {
         Properties properties = new Properties();
         try {
-            properties.load(this.getClass().getResourceAsStream("project.properties"));
+            properties.load(this.getClass().getClassLoader().getResourceAsStream("project.properties"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
