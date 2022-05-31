@@ -142,6 +142,7 @@ public class RegisterCommands extends ListenerAdapter {
                     Main.getDiscord().sendErrorMessage("Database " + CreateMysql.dbName + " existiert nicht");
                 }
             } else if (e.getSubcommandName().equalsIgnoreCase(RegisterCommands.settingsSupWMessage)) {
+                e.deferReply().queue();
                 if (Main.getCreateMysql().getMysql().existsDatabase(CreateMysql.dbName)) {
                     if (Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).existsTable(CreateMysql.settingsTName)) {
                         Table table = Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).getTable(CreateMysql.settingsTName);
@@ -150,7 +151,7 @@ public class RegisterCommands extends ListenerAdapter {
                             if (channel != null) {
                                 if (table.getColumn(CreateMysql.colmGuild).getAll().contains(e.getGuild().getId())) {
                                     table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId()).set(table.getColumn(CreateMysql.colmWChannel), channel.getId());
-                                    e.getInteraction().reply("Der Channel für die Willkommens Nachricht wurde erfolgreich gesetzt!").queue();
+                                    e.getHook().sendMessage("Der Channel für die Willkommens Nachricht wurde erfolgreich gesetzt!").queue();
                                 } else {
                                     table.insert(new RowBuilder()
                                             .with(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId())
@@ -158,10 +159,10 @@ public class RegisterCommands extends ListenerAdapter {
                                             .with(table.getColumn(CreateMysql.colmWChannel), channel.getId())
                                             .build()
                                     );
-                                    e.getInteraction().reply("Der Channel für die Willkommens Nachricht wurde erfolgreich gesetzt!").queue();
+                                    e.getHook().sendMessage("Der Channel für die Willkommens Nachricht wurde erfolgreich gesetzt!").queue();
                                 }
                             } else {
-                                e.getInteraction().reply("Der Angegebene Channel konnte nicht gefunden werden!").queue();
+                                e.getHook().sendMessage("Der Angegebene Channel konnte nicht gefunden werden!").queue();
                             }
                         } else {
                             Main.getDiscord().sendErrorMessage("Column " + CreateMysql.colmGuild + " in " + CreateMysql.settingsTName + " existiert nicht");

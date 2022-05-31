@@ -62,8 +62,8 @@ public class Events extends ListenerAdapter {
                                 }
                             }
                         }
-                        if (!row.get(CreateMysql.colmJRole).toString().isEmpty() || !row.get(CreateMysql.colmJRole).toString().isBlank()) {
-                            Role role = e.getGuild().getRoleById(row.get(CreateMysql.colmJRole).toString());
+                        if (!row.get(CreateMysql.colmJRole).getAsString().isEmpty() || !row.get(CreateMysql.colmJRole).getAsString().isBlank()) {
+                            Role role = e.getGuild().getRoleById(row.get(CreateMysql.colmJRole).getAsLong());
                             Member bot = e.getGuild().getMember(e.getJDA().getSelfUser());
                             if (role != null) {
                                 if (bot != null && bot.canInteract(role)) {
@@ -112,14 +112,14 @@ public class Events extends ListenerAdapter {
                     HashMap<String, SearchResult> row = table.getRow(table.getColumn(CreateMysql.colmGuild), event.getGuild().getId()).get();
                     for (SelectOption option : event.getSelectedOptions()) {
                         if (option.getValue().equalsIgnoreCase(RegisterCommands.settingsSupJoinRole)) {
-                            if (!row.get(CreateMysql.colmJRole).toString().isEmpty()) {
+                            if (!row.get(CreateMysql.colmJRole).getAsString().isEmpty()) {
                                 table.getRow(table.getColumn(CreateMysql.colmGuild), event.getGuild().getId()).set(table.getColumn(CreateMysql.colmJRole), "");
                                 event.getInteraction().reply("Die Einstellung für die Join Rolle wurde entfernt").queue();
                             } else {
                                 event.getInteraction().reply("Es ist keine Einstellung mit dieser Option vorhanden!").queue();
                             }
                         } else if (option.getValue().equalsIgnoreCase(RegisterCommands.settingsSupWMessage)) {
-                            if (!row.get(CreateMysql.colmWChannel).toString().isEmpty()) {
+                            if (!row.get(CreateMysql.colmWChannel).getAsString().isEmpty()) {
                                 table.getRow(table.getColumn(CreateMysql.colmGuild), event.getGuild().getId()).set(table.getColumn(CreateMysql.colmWChannel), "");
                                 event.getInteraction().reply("Die Einstellung für die Willkommens Nachricht wurde entfernt").queue();
                             } else {
