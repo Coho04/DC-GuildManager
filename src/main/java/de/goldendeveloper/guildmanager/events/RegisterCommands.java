@@ -151,7 +151,6 @@ public class RegisterCommands extends ListenerAdapter {
                             TextChannel channel = e.getOption(RegisterCommands.settingsSupWMessageOptionChannel).getAsTextChannel();
                             if (channel != null) {
                                 if (table.getColumn(CreateMysql.colmGuild).getAll().contains(e.getGuild().getId())) {
-                                    HashMap<String, Object> row = table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId()).get();
                                     table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId()).set(table.getColumn(CreateMysql.colmWChannel), channel.getId());
                                     e.getInteraction().reply("Der Channel für die Willkommens Nachricht wurde erfolgreich gesetzt!").queue();
                                 } else {

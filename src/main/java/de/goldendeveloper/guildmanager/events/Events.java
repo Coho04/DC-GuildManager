@@ -2,6 +2,7 @@ package de.goldendeveloper.guildmanager.events;
 
 import de.goldendeveloper.guildmanager.CreateMysql;
 import de.goldendeveloper.guildmanager.Main;
+import de.goldendeveloper.mysql.entities.SearchResult;
 import de.goldendeveloper.mysql.entities.Table;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -27,7 +28,7 @@ public class Events extends ListenerAdapter {
                 Table table = Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).getTable(CreateMysql.settingsTName);
                 if (table.existsColumn(CreateMysql.colmGuild)) {
                     if (table.getColumn(CreateMysql.colmGuild).getAll().contains(e.getGuild().getId())) {
-                        HashMap<String, Object> row = table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId()).get();
+                        HashMap<String, SearchResult> row = table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId()).get();
                         if (!row.get(CreateMysql.colmWChannel).toString().isEmpty() || !row.get(CreateMysql.colmWChannel).toString().isBlank()) {
                             TextChannel ch = e.getGuild().getTextChannelById(row.get(CreateMysql.colmWChannel).toString());
                             if (ch != null) {
@@ -103,7 +104,7 @@ public class Events extends ListenerAdapter {
             if (Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).existsTable(CreateMysql.settingsTName)) {
                 Table table = Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).getTable(CreateMysql.settingsTName);
                 if (table.existsColumn(CreateMysql.colmGuild)) {
-                    HashMap<String, Object> row = table.getRow(table.getColumn(CreateMysql.colmGuild), event.getGuild().getId()).get();
+                    HashMap<String, SearchResult> row = table.getRow(table.getColumn(CreateMysql.colmGuild), event.getGuild().getId()).get();
                     for (SelectOption option : event.getSelectedOptions()) {
                         if (option.getValue().equalsIgnoreCase(RegisterCommands.settingsSupJoinRole)) {
                             if (!row.get(CreateMysql.colmJRole).toString().isEmpty()) {
