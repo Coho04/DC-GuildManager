@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.golden-developer</groupId>
+    <groupId>de.goldendeveloper</groupId>
     <artifactId>GD-GuildManager</artifactId>
     <version>1.0</version>
 
@@ -102,7 +102,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>5.0.0-alpha.10</version>
+            <version>5.0.0-alpha.11</version>
         </dependency>
         <dependency>
             <groupId>club.minnced</groupId>

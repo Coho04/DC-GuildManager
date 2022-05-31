@@ -7,6 +7,7 @@ import de.goldendeveloper.guildmanager.events.Events;
 import de.goldendeveloper.guildmanager.events.RegisterCommands;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -15,8 +16,11 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
+import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Date;
+import java.util.Properties;
 
 public class Discord {
 
@@ -42,7 +46,9 @@ public class Discord {
                     .setContextEnabled(true)
                     .build().awaitReady();
             registerCommand();
-            Online();
+            if (!System.getProperty("os.name").split(" ")[0].equalsIgnoreCase("windows")) {
+                Online();
+            }
         } catch (LoginException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -68,12 +74,12 @@ public class Discord {
         bot.upsertCommand(RegisterCommands.Ban, "Bannt einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.INTEGER, "time", "Gib die Ban Dauer in Tagen an um den User zu bannen", true, true).addOption(OptionType.STRING, "reason", "Begründe deinen Ban", true).queue();
         bot.upsertCommand(RegisterCommands.Kick, "Kickt einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.STRING, "reason", "Begründe deinen Kick").queue();
         bot.upsertCommand(RegisterCommands.TimeOut, "Timeoute einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.STRING, "time", "Gib die Timeout Dauer in Tagen an um den User zu timeouten. (In Minuten)", true).queue();
-        bot.upsertCommand(RegisterCommands.Clear, "Löscht eine Anzahl von Nachrichten!").addOption(OptionType.INTEGER, RegisterCommands.ClearOptionAmount, "Anzahl von löschenden Nachrichten!").queue();
+        bot.upsertCommand(RegisterCommands.Clear, "Löscht eine Anzahl von Nachrichten!").addOption(OptionType.INTEGER, RegisterCommands.ClearOptionAmount, "Anzahl von löschenden Nachrichten!", true).queue();
 
         bot.upsertCommand(RegisterCommands.settings, "Stelle den GuildManager ein!")
                 .addSubcommands(
                         new SubcommandData(RegisterCommands.settingsSupJoinRole, "Die Rolle die einem User automatisch beim Joinen gegeben werden soll!").addOption(OptionType.ROLE, RegisterCommands.settingsSupJoinRoleOptionRole, "Join Rolle", true),
-                        new SubcommandData(RegisterCommands.settingsSupRemove, "Zeigt die eine Liste aller Option die Entfernt werden können!" ),
+                        new SubcommandData(RegisterCommands.settingsSupRemove, "Zeigt die eine Liste aller Option die Entfernt werden können!"),
                         new SubcommandData(RegisterCommands.settingsSupWMessage, "Setzte einen Willkommens Channel um deine User willkommen zu heißen!").addOption(OptionType.CHANNEL, RegisterCommands.settingsSupWMessageOptionChannel, "Willkommens Channel", true)
                 ).queue();
     }
@@ -94,10 +100,25 @@ public class Discord {
     private void Online() {
         WebhookEmbedBuilder embed = new WebhookEmbedBuilder();
         embed.setAuthor(new WebhookEmbed.EmbedAuthor(getBot().getSelfUser().getName(), getBot().getSelfUser().getAvatarUrl(), "https://Golden-Developer.de"));
-        embed.addField(new WebhookEmbed.EmbedField(false, "[Status]", "ONLINE"));
         embed.setColor(0x00FF00);
+        embed.addField(new WebhookEmbed.EmbedField(false, "[Status]", "ONLINE"));
+        embed.addField(new WebhookEmbed.EmbedField(false, "Gestartet als", bot.getSelfUser().getName()));
+        embed.addField(new WebhookEmbed.EmbedField(false, "Server", Integer.toString(bot.getGuilds().size())));
+        embed.addField(new WebhookEmbed.EmbedField(false, "Status", "\uD83D\uDFE2 Gestartet"));
+        embed.addField(new WebhookEmbed.EmbedField(false, "Version", getProjektVersion()));
         embed.setFooter(new WebhookEmbed.EmbedFooter("@Golden-Developer", getBot().getSelfUser().getAvatarUrl()));
+        embed.setTimestamp(new Date().toInstant());
         new WebhookClientBuilder(Main.getConfig().getDiscordWebhook()).build().send(embed.build());
+    }
+
+    private String getProjektVersion() {
+        Properties properties = new Properties();
+        try {
+            properties.load(this.getClass().getClassLoader().getResourceAsStream("project.properties"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return properties.getProperty("version");
     }
 
     public OffsetDateTime getDate() {
