@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -525,7 +526,6 @@ public class RegisterCommands extends ListenerAdapter {
         }
         return OfflineMembers;
     }
-
 
     public static String hasError(String error) {
         return "[ERROR]: Es ist ein Fehler aufgetreten bitte melden den Grund mit /error-report \n" + "Fehler: " + error;

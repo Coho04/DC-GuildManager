@@ -1,5 +1,8 @@
 package de.goldendeveloper.guildmanager.events;
 
+import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.send.WebhookEmbed;
+import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import de.goldendeveloper.guildmanager.CreateMysql;
 import de.goldendeveloper.guildmanager.Main;
 import de.goldendeveloper.mysql.entities.SearchResult;
@@ -17,6 +20,7 @@ import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.Date;
 import java.util.HashMap;
 
 public class Events extends ListenerAdapter {
@@ -29,8 +33,8 @@ public class Events extends ListenerAdapter {
                 if (table.existsColumn(CreateMysql.colmGuild)) {
                     if (table.getColumn(CreateMysql.colmGuild).getAll().contains(e.getGuild().getId())) {
                         HashMap<String, SearchResult> row = table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId()).get();
-                        if (!row.get(CreateMysql.colmWChannel).toString().isEmpty() || !row.get(CreateMysql.colmWChannel).toString().isBlank()) {
-                            TextChannel ch = e.getGuild().getTextChannelById(row.get(CreateMysql.colmWChannel).toString());
+                        if (!row.get(CreateMysql.colmWChannel).getAsString().isEmpty() || !row.get(CreateMysql.colmWChannel).getAsString().isBlank()) {
+                            TextChannel ch = e.getGuild().getTextChannelById(row.get(CreateMysql.colmWChannel).getAsLong());
                             if (ch != null) {
                                 User user = e.getMember().getUser();
                                 String ServerName = e.getGuild().getName();
@@ -57,7 +61,8 @@ public class Events extends ListenerAdapter {
                                     });
                                 }
                             }
-                        } else if (!row.get(CreateMysql.colmJRole).toString().isEmpty() || !row.get(CreateMysql.colmJRole).toString().isBlank()) {
+                        }
+                        if (!row.get(CreateMysql.colmJRole).toString().isEmpty() || !row.get(CreateMysql.colmJRole).toString().isBlank()) {
                             Role role = e.getGuild().getRoleById(row.get(CreateMysql.colmJRole).toString());
                             Member bot = e.getGuild().getMember(e.getJDA().getSelfUser());
                             if (role != null) {
@@ -129,7 +134,19 @@ public class Events extends ListenerAdapter {
 
     @Override
     public void onShutdown(@NotNull ShutdownEvent e) {
-        System.exit(0);
+        WebhookEmbedBuilder embed = new WebhookEmbedBuilder();
+        embed.setAuthor(new WebhookEmbed.EmbedAuthor(Main.getDiscord().getBot().getSelfUser().getName(), Main.getDiscord().getBot().getSelfUser().getAvatarUrl(), "https://Golden-Developer.de"));
+        embed.addField(new WebhookEmbed.EmbedField(false, "[Status]", "Offline"));
+        embed.addField(new WebhookEmbed.EmbedField(false, "Gestoppt als", Main.getDiscord().getBot().getSelfUser().getName()));
+        embed.addField(new WebhookEmbed.EmbedField(false, "Server", Integer.toString(Main.getDiscord().getBot().getGuilds().size())));
+        embed.addField(new WebhookEmbed.EmbedField(false, "Status", "\uD83D\uDD34 Offline"));
+        embed.addField(new WebhookEmbed.EmbedField(false, "Version", Main.getDiscord().getProjektVersion()));
+        embed.setFooter(new WebhookEmbed.EmbedFooter("@Golden-Developer", Main.getDiscord().getBot().getSelfUser().getAvatarUrl()));
+        embed.setTimestamp(new Date().toInstant());
+        embed.setColor(0xFF0000);
+        if (new WebhookClientBuilder(Main.getConfig().getDiscordWebhook()).build().send(embed.build()).isDone()) {
+            System.exit(0);
+        }
     }
 
     @Override
@@ -149,10 +166,5 @@ public class Events extends ListenerAdapter {
                 ).queue();
             }
         }
-    }
-
-    @Override
-    public void onUserContextInteraction(UserContextInteractionEvent e) {
-        System.out.println(e.getName());
     }
 }
