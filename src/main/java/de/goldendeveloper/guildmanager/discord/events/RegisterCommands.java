@@ -1,9 +1,6 @@
-package de.goldendeveloper.guildmanager.events;
+package de.goldendeveloper.guildmanager.discord.events;
 
-import club.minnced.discord.webhook.WebhookClientBuilder;
-import club.minnced.discord.webhook.send.WebhookEmbed;
-import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
-import de.goldendeveloper.guildmanager.CreateMysql;
+import de.goldendeveloper.guildmanager.MysqlConnection;
 import de.goldendeveloper.guildmanager.Main;
 import de.goldendeveloper.mysql.entities.RowBuilder;
 import de.goldendeveloper.mysql.entities.Table;
@@ -19,7 +16,6 @@ import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -114,48 +110,47 @@ public class RegisterCommands extends ListenerAdapter {
     public void Settings(SlashCommandInteractionEvent e) {
         if (e.getMember().hasPermission(Permission.ADMINISTRATOR)) {
             if (e.getSubcommandName().equalsIgnoreCase(RegisterCommands.settingsSupJoinRole)) {
-                if (Main.getCreateMysql().getMysql().existsDatabase(CreateMysql.dbName)) {
-                    if (Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).existsTable(CreateMysql.settingsTName)) {
-                        Table table = Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).getTable(CreateMysql.settingsTName);
-                        if (table.existsColumn(CreateMysql.colmGuild)) {
+                if (Main.getCreateMysql().getMysql().existsDatabase(MysqlConnection.dbName)) {
+                    if (Main.getCreateMysql().getMysql().getDatabase(MysqlConnection.dbName).existsTable(MysqlConnection.settingsTName)) {
+                        Table table = Main.getCreateMysql().getMysql().getDatabase(MysqlConnection.dbName).getTable(MysqlConnection.settingsTName);
+                        if (table.existsColumn(MysqlConnection.colmGuild)) {
                             Role role = e.getOption(RegisterCommands.settingsSupJoinRoleOptionRole).getAsRole();
-                            if (table.getColumn(CreateMysql.colmGuild).getAll().contains(e.getGuild().getId())) {
-                                table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId()).set(table.getColumn(CreateMysql.colmJRole), role.getId());
+                            if (table.getColumn(MysqlConnection.colmGuild).getAll().contains(e.getGuild().getId())) {
+                                table.getRow(table.getColumn(MysqlConnection.colmGuild), e.getGuild().getId()).set(table.getColumn(MysqlConnection.colmJRole), role.getId());
                                 e.getInteraction().reply("Die Rolle fürs joinen wurde erfolgreich gesetzt!").queue();
                             } else {
                                 table.insert(new RowBuilder()
-                                        .with(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId())
-                                        .with(table.getColumn(CreateMysql.colmJRole), role.getId())
-                                        .with(table.getColumn(CreateMysql.colmWChannel), "")
+                                        .with(table.getColumn(MysqlConnection.colmGuild), e.getGuild().getId())
+                                        .with(table.getColumn(MysqlConnection.colmJRole), role.getId())
+                                        .with(table.getColumn(MysqlConnection.colmWChannel), "")
                                         .build()
                                 );
                                 e.getInteraction().reply("Die Rolle fürs joinen wurde erfolgreich gesetzt!").queue();
                             }
                         } else {
-                            Main.getDiscord().sendErrorMessage("Column " + CreateMysql.colmGuild + " in " + CreateMysql.settingsTName + " existiert nicht");
+                            Main.getDiscord().sendErrorMessage("Column " + MysqlConnection.colmGuild + " in " + MysqlConnection.settingsTName + " existiert nicht");
                         }
                     } else {
-                        Main.getDiscord().sendErrorMessage("Table " + CreateMysql.settingsTName + " in " + CreateMysql.dbName + " existiert nicht");
+                        Main.getDiscord().sendErrorMessage("Table " + MysqlConnection.settingsTName + " in " + MysqlConnection.dbName + " existiert nicht");
                     }
                 } else {
-                    Main.getDiscord().sendErrorMessage("Database " + CreateMysql.dbName + " existiert nicht");
+                    Main.getDiscord().sendErrorMessage("Database " + MysqlConnection.dbName + " existiert nicht");
                 }
             } else if (e.getSubcommandName().equalsIgnoreCase(RegisterCommands.settingsSupWMessage)) {
-                if (Main.getCreateMysql().getMysql().existsDatabase(CreateMysql.dbName)) {
-                    if (Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).existsTable(CreateMysql.settingsTName)) {
-                        Table table = Main.getCreateMysql().getMysql().getDatabase(CreateMysql.dbName).getTable(CreateMysql.settingsTName);
-                        if (table.existsColumn(CreateMysql.colmGuild)) {
+                if (Main.getCreateMysql().getMysql().existsDatabase(MysqlConnection.dbName)) {
+                    if (Main.getCreateMysql().getMysql().getDatabase(MysqlConnection.dbName).existsTable(MysqlConnection.settingsTName)) {
+                        Table table = Main.getCreateMysql().getMysql().getDatabase(MysqlConnection.dbName).getTable(MysqlConnection.settingsTName);
+                        if (table.existsColumn(MysqlConnection.colmGuild)) {
                             TextChannel channel = e.getOption(RegisterCommands.settingsSupWMessageOptionChannel).getAsTextChannel();
                             if (channel != null) {
-                                if (table.getColumn(CreateMysql.colmGuild).getAll().contains(e.getGuild().getId())) {
-                                    HashMap<String, Object> row = table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId()).get();
-                                    table.getRow(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId()).set(table.getColumn(CreateMysql.colmWChannel), channel.getId());
+                                if (table.getColumn(MysqlConnection.colmGuild).getAll().contains(e.getGuild().getId())) {
+                                    table.getRow(table.getColumn(MysqlConnection.colmGuild), e.getGuild().getId()).set(table.getColumn(MysqlConnection.colmWChannel), channel.getId());
                                     e.getInteraction().reply("Der Channel für die Willkommens Nachricht wurde erfolgreich gesetzt!").queue();
                                 } else {
                                     table.insert(new RowBuilder()
-                                            .with(table.getColumn(CreateMysql.colmGuild), e.getGuild().getId())
-                                            .with(table.getColumn(CreateMysql.colmJRole), "")
-                                            .with(table.getColumn(CreateMysql.colmWChannel), channel.getId())
+                                            .with(table.getColumn(MysqlConnection.colmGuild), e.getGuild().getId())
+                                            .with(table.getColumn(MysqlConnection.colmJRole), "")
+                                            .with(table.getColumn(MysqlConnection.colmWChannel), channel.getId())
                                             .build()
                                     );
                                     e.getInteraction().reply("Der Channel für die Willkommens Nachricht wurde erfolgreich gesetzt!").queue();
@@ -164,13 +159,13 @@ public class RegisterCommands extends ListenerAdapter {
                                 e.getInteraction().reply("Der Angegebene Channel konnte nicht gefunden werden!").queue();
                             }
                         } else {
-                            Main.getDiscord().sendErrorMessage("Column " + CreateMysql.colmGuild + " in " + CreateMysql.settingsTName + " existiert nicht");
+                            Main.getDiscord().sendErrorMessage("Column " + MysqlConnection.colmGuild + " in " + MysqlConnection.settingsTName + " existiert nicht");
                         }
                     } else {
-                        Main.getDiscord().sendErrorMessage("Table " + CreateMysql.settingsTName + " in " + CreateMysql.dbName + " existiert nicht");
+                        Main.getDiscord().sendErrorMessage("Table " + MysqlConnection.settingsTName + " in " + MysqlConnection.dbName + " existiert nicht");
                     }
                 } else {
-                    Main.getDiscord().sendErrorMessage("Database " + CreateMysql.dbName + " existiert nicht");
+                    Main.getDiscord().sendErrorMessage("Database " + MysqlConnection.dbName + " existiert nicht");
                 }
             } else if (e.getSubcommandName().equalsIgnoreCase(RegisterCommands.settingsSupRemove)) {
                 EmbedBuilder builder = new EmbedBuilder();
@@ -280,16 +275,10 @@ public class RegisterCommands extends ListenerAdapter {
         User _Coho04_ = e.getJDA().getUserById(_Coho04_MEMBER);
         User zRazzer = e.getJDA().getUserById("428811057700536331");
         if (e.getUser() == zRazzer || e.getUser() == _Coho04_) {
-            WebhookEmbedBuilder embed = new WebhookEmbedBuilder();
-            embed.setAuthor(new WebhookEmbed.EmbedAuthor(Main.getDiscord().getBot().getSelfUser().getName(), Main.getDiscord().getBot().getSelfUser().getAvatarUrl(), "https://Golden-Developer.de"));
-            embed.addField(new WebhookEmbed.EmbedField(false, "[Status]", "OFFLINE"));
-            embed.setColor(0xFF0000);
-            embed.setFooter(new WebhookEmbed.EmbedFooter("@Golden-Developer", Main.getDiscord().getBot().getSelfUser().getAvatarUrl()));
-            new WebhookClientBuilder(Main.getConfig().getDiscordWebhook()).build().send(embed.build());
-            e.getInteraction().reply("Der Bot wird nun heruntergefahren").queue();
+            e.getInteraction().reply("Der Discord Bot [" + e.getJDA().getSelfUser().getName() + "] wird nun heruntergefahren").queue();
             e.getJDA().shutdown();
         } else {
-            e.getInteraction().reply("Dazu hast du keine Rechte du musst für diesen Befehl der Bot inhaber sein!").queue();
+            e.getInteraction().reply("Dazu hast du keine Rechte du musst für diesen Befehl der Bot Inhaber sein!").queue();
         }
     }
 
@@ -298,14 +287,8 @@ public class RegisterCommands extends ListenerAdapter {
         User zRazzer = e.getJDA().getUserById("428811057700536331");
         if (e.getUser() == zRazzer || e.getUser() == _Coho04_) {
             try {
-                e.getInteraction().reply("Der Discord Bot wird nun neugestartet!").queue();
-                WebhookEmbedBuilder embed = new WebhookEmbedBuilder();
-                embed.setAuthor(new WebhookEmbed.EmbedAuthor(Main.getDiscord().getBot().getSelfUser().getName(), Main.getDiscord().getBot().getSelfUser().getAvatarUrl(), "https://Golden-Developer.de"));
-                embed.addField(new WebhookEmbed.EmbedField(false, "[Status]", "OFFLINE"));
-                embed.setColor(0xFF0000);
-                embed.setFooter(new WebhookEmbed.EmbedFooter("@Golden-Developer", Main.getDiscord().getBot().getSelfUser().getAvatarUrl()));
-                new WebhookClientBuilder(Main.getConfig().getDiscordWebhook()).build().send(embed.build());
-                Process p = Runtime.getRuntime().exec("screen -AmdS GD-GuildManager java -Xms1096M -Xmx1096M -jar GD-GuildManager-1.0.jar");
+                e.getInteraction().reply("Der Discord Bot [" + e.getJDA().getSelfUser().getName() + "] wird nun neugestartet!").queue();
+                Process p = Runtime.getRuntime().exec("screen -AmdS " + Main.getDiscord().getProjektName() + " java -Xms1096M -Xmx1096M -jar " + Main.getDiscord().getProjektName() + "-" + Main.getDiscord().getProjektVersion() + ".jar restart");
                 p.waitFor();
                 e.getJDA().shutdown();
             } catch (Exception ex) {

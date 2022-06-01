@@ -1,13 +1,14 @@
-package de.goldendeveloper.guildmanager;
+package de.goldendeveloper.guildmanager.discord;
 
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
-import de.goldendeveloper.guildmanager.events.Events;
-import de.goldendeveloper.guildmanager.events.RegisterCommands;
+import de.goldendeveloper.guildmanager.Main;
+import de.goldendeveloper.guildmanager.discord.events.Events;
+import de.goldendeveloper.guildmanager.discord.events.RegisterCommands;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -17,15 +18,12 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.Properties;
 
 public class Discord {
 
     public static JDA bot;
-    private final OffsetDateTime date = OffsetDateTime.now(ZoneOffset.of("+02:00"));
 
     public Discord(String BOT_TOKEN) {
         try {
@@ -49,6 +47,7 @@ public class Discord {
             if (!System.getProperty("os.name").split(" ")[0].equalsIgnoreCase("windows")) {
                 Online();
             }
+            bot.getPresence().setActivity(Activity.playing("/help | " + bot.getGuilds().size() + " Servern"));
         } catch (LoginException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -68,7 +67,7 @@ public class Discord {
         bot.upsertCommand(RegisterCommands.Invite, "Du wirst eingeladen auf unseren Discord").queue();
         bot.upsertCommand(RegisterCommands.Join_Channel, "Der Bot betritt deinen Voice Channel").queue();
         bot.upsertCommand(RegisterCommands.Leave_Channel, "Der Bot verlässt deinen Voice Channel").queue();
-        bot.upsertCommand(RegisterCommands.Join, "Der Bot sendet dir einen link um ihn einzuladen").queue();
+        bot.upsertCommand(RegisterCommands.Join, "Der Bot sendet dir einen Link um ihn einzuladen").queue();
         bot.upsertCommand(RegisterCommands.Error_report, "Reporte einen Bot fehler").addOption(OptionType.STRING, "error", "Schildere hier deinen gefundenen Bot Fehler", true).queue();
         bot.upsertCommand(RegisterCommands.Birthday, "Gratuliere einem anderen User").addOption(OptionType.USER, "user", "Fügt einen anderen User hinzu", true).addOption(OptionType.BOOLEAN, "private", "Möchtest du dem User die Glückwünsche privat zukommen lassen?").queue();
         bot.upsertCommand(RegisterCommands.Ban, "Bannt einen bestimmten Spieler").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.INTEGER, "time", "Gib die Ban Dauer in Tagen an um den User zu bannen", true, true).addOption(OptionType.STRING, "reason", "Begründe deinen Ban", true).queue();
@@ -99,9 +98,14 @@ public class Discord {
 
     private void Online() {
         WebhookEmbedBuilder embed = new WebhookEmbedBuilder();
+        if (Main.getRestart()) {
+            embed.setColor(0x33FFFF);
+            embed.addField(new WebhookEmbed.EmbedField(false, "[Status]", "Neustart erfolgreich"));
+        } else {
+            embed.setColor(0x00FF00);
+            embed.addField(new WebhookEmbed.EmbedField(false, "[Status]", "ONLINE"));
+        }
         embed.setAuthor(new WebhookEmbed.EmbedAuthor(getBot().getSelfUser().getName(), getBot().getSelfUser().getAvatarUrl(), "https://Golden-Developer.de"));
-        embed.setColor(0x00FF00);
-        embed.addField(new WebhookEmbed.EmbedField(false, "[Status]", "ONLINE"));
         embed.addField(new WebhookEmbed.EmbedField(false, "Gestartet als", bot.getSelfUser().getName()));
         embed.addField(new WebhookEmbed.EmbedField(false, "Server", Integer.toString(bot.getGuilds().size())));
         embed.addField(new WebhookEmbed.EmbedField(false, "Status", "\uD83D\uDFE2 Gestartet"));
@@ -111,7 +115,7 @@ public class Discord {
         new WebhookClientBuilder(Main.getConfig().getDiscordWebhook()).build().send(embed.build());
     }
 
-    private String getProjektVersion() {
+    public String getProjektVersion() {
         Properties properties = new Properties();
         try {
             properties.load(this.getClass().getClassLoader().getResourceAsStream("project.properties"));
@@ -121,7 +125,13 @@ public class Discord {
         return properties.getProperty("version");
     }
 
-    public OffsetDateTime getDate() {
-        return date;
+    public String getProjektName() {
+        Properties properties = new Properties();
+        try {
+            properties.load(this.getClass().getClassLoader().getResourceAsStream("project.properties"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return properties.getProperty("name");
     }
 }
