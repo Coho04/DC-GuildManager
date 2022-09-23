@@ -2,7 +2,6 @@ package de.goldendeveloper.guildmanager;
 
 import de.goldendeveloper.mysql.MYSQL;
 import de.goldendeveloper.mysql.entities.Database;
-import de.goldendeveloper.mysql.entities.MysqlTypes;
 import de.goldendeveloper.mysql.entities.Table;
 
 public class MysqlConnection {
@@ -25,13 +24,13 @@ public class MysqlConnection {
         }
         Table tb = db.getTable(settingsTName);
         if (!tb.existsColumn(colmGuild)) {
-            tb.addColumn(colmGuild, MysqlTypes.VARCHAR, 80);
+            tb.addColumn(colmGuild);
         }
         if (!tb.existsColumn(colmWChannel)) {
-            tb.addColumn(colmWChannel, MysqlTypes.VARCHAR, 80);
+            tb.addColumn(colmWChannel);
         }
         if (!tb.existsColumn(colmJRole)) {
-            tb.addColumn(colmJRole, MysqlTypes.VARCHAR, 80);
+            tb.addColumn(colmJRole);
         }
         System.out.println("MYSQL Finished");
     }

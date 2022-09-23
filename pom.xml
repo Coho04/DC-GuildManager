@@ -107,7 +107,7 @@
         <dependency>
             <groupId>club.minnced</groupId>
             <artifactId>discord-webhooks</artifactId>
-            <version>0.8.0</version>
+            <version>0.8.2</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -122,7 +122,7 @@
         <dependency>
             <groupId>com.github.golden-developer</groupId>
             <artifactId>MYSQL-Api</artifactId>
-            <version>3.7</version>
+            <version>4.3</version>
         </dependency>
     </dependencies>
 </project>
