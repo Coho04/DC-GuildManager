@@ -59,7 +59,7 @@ public class Events extends ListenerAdapter {
             if (Main.getCreateMysql().getMysql().getDatabase(MysqlConnection.dbName).existsTable(MysqlConnection.settingsTName)) {
                 Table table = Main.getCreateMysql().getMysql().getDatabase(MysqlConnection.dbName).getTable(MysqlConnection.settingsTName);
                 if (table.existsColumn(MysqlConnection.colmGuild)) {
-                    if (table.getColumn(MysqlConnection.colmGuild).getAll().contains(e.getGuild().getId())) {
+                    if (table.getColumn(MysqlConnection.colmGuild).getAll().getAsString().contains(e.getGuild().getId())) {
                         HashMap<String, SearchResult> row = table.getRow(table.getColumn(MysqlConnection.colmGuild), e.getGuild().getId()).get();
                         if (!row.get(MysqlConnection.colmWChannel).toString().isEmpty() || !row.get(MysqlConnection.colmWChannel).toString().isBlank()) {
                             TextChannel ch = e.getGuild().getTextChannelById(row.get(MysqlConnection.colmWChannel).getAsString());

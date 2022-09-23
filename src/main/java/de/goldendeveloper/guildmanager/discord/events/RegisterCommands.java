@@ -115,7 +115,7 @@ public class RegisterCommands extends ListenerAdapter {
                         Table table = Main.getCreateMysql().getMysql().getDatabase(MysqlConnection.dbName).getTable(MysqlConnection.settingsTName);
                         if (table.existsColumn(MysqlConnection.colmGuild)) {
                             Role role = e.getOption(RegisterCommands.settingsSupJoinRoleOptionRole).getAsRole();
-                            if (table.getColumn(MysqlConnection.colmGuild).getAll().contains(e.getGuild().getId())) {
+                            if (table.getColumn(MysqlConnection.colmGuild).getAll().getAsString().contains(e.getGuild().getId())) {
                                 table.getRow(table.getColumn(MysqlConnection.colmGuild), e.getGuild().getId()).set(table.getColumn(MysqlConnection.colmJRole), role.getId());
                                 e.getInteraction().reply("Die Rolle fürs joinen wurde erfolgreich gesetzt!").queue();
                             } else {
@@ -144,7 +144,7 @@ public class RegisterCommands extends ListenerAdapter {
                         if (table.existsColumn(MysqlConnection.colmGuild)) {
                             TextChannel channel = e.getOption(RegisterCommands.settingsSupWMessageOptionChannel).getAsTextChannel();
                             if (channel != null) {
-                                if (table.getColumn(MysqlConnection.colmGuild).getAll().contains(e.getGuild().getId())) {
+                                if (table.getColumn(MysqlConnection.colmGuild).getAll().getAsString().contains(e.getGuild().getId())) {
                                     table.getRow(table.getColumn(MysqlConnection.colmGuild), e.getGuild().getId()).set(table.getColumn(MysqlConnection.colmWChannel), channel.getId());
                                     e.getHook().sendMessage("Der Channel für die Willkommens Nachricht wurde erfolgreich gesetzt!").queue();
                                 } else {
