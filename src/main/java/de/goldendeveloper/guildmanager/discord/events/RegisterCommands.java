@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -142,7 +143,7 @@ public class RegisterCommands extends ListenerAdapter {
                     if (Main.getCreateMysql().getMysql().getDatabase(MysqlConnection.dbName).existsTable(MysqlConnection.settingsTName)) {
                         Table table = Main.getCreateMysql().getMysql().getDatabase(MysqlConnection.dbName).getTable(MysqlConnection.settingsTName);
                         if (table.existsColumn(MysqlConnection.colmGuild)) {
-                            TextChannel channel = e.getOption(RegisterCommands.settingsSupWMessageOptionChannel).getAsTextChannel();
+                            TextChannel channel = e.getOption(RegisterCommands.settingsSupWMessageOptionChannel).getAsChannel().asTextChannel();
                             if (channel != null) {
                                 if (table.getColumn(MysqlConnection.colmGuild).getAll().getAsString().contains(e.getGuild().getId())) {
                                     table.getRow(table.getColumn(MysqlConnection.colmGuild), e.getGuild().getId()).set(table.getColumn(MysqlConnection.colmWChannel), channel.getId());
@@ -252,10 +253,10 @@ public class RegisterCommands extends ListenerAdapter {
                     }
                     if (member != null) {
                         if (!reason.isEmpty()) {
-                            member.ban(time, reason).queue();
+                            member.ban(time, TimeUnit.MINUTES).reason(reason).queue();
                             e.getInteraction().reply("Der User " + member.getUser().getName() + " wurde erfolgreich gebannt!").queue();
                         } else {
-                            member.ban(time).queue();
+                            member.ban(time, TimeUnit.MINUTES).queue();
                             e.getInteraction().reply("Der User " + member.getUser().getName() + " wurde erfolgreich gebannt!").queue();
                         }
                     } else {
