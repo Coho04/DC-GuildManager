@@ -16,7 +16,9 @@ public class Main {
         if (args.length >= 1 && args[0].equalsIgnoreCase("restart")) {
             restart = true;
         }
-        if (System.getProperty("os.name").split(" ")[0].equalsIgnoreCase("windows")) {
+
+        String device = System.getProperty("os.name").split(" ")[0];
+        if (device.equalsIgnoreCase("windows") || device.equalsIgnoreCase("Mac")) {
             deployment = false;
         }
         config = new Config();
