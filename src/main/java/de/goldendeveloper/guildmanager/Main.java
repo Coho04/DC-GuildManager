@@ -6,7 +6,8 @@ public class Main {
 
     private static Discord discord;
     private static Config config;
-    private static MysqlConnection createMYSQl;
+    private static MysqlConnection mysqlConnection;
+    private static ServerCommunicator serverCommunicator;
 
     private static Boolean restart = false;
     private static Boolean deployment = true;
@@ -19,7 +20,8 @@ public class Main {
             deployment = false;
         }
         config = new Config();
-        createMYSQl = new MysqlConnection(config.getMysqlHostname(), config.getMysqlUsername(), config.getMysqlPassword(), config.getMysqlPort());
+        serverCommunicator = new ServerCommunicator(config.getServerHostname(), config.getServerPort());
+        mysqlConnection = new MysqlConnection(config.getMysqlHostname(), config.getMysqlUsername(), config.getMysqlPassword(), config.getMysqlPort());
         discord = new Discord(config.getDiscordToken());
     }
 
@@ -31,8 +33,8 @@ public class Main {
         return config;
     }
 
-    public static MysqlConnection getCreateMysql() {
-        return createMYSQl;
+    public static MysqlConnection getMysqlConnection() {
+        return mysqlConnection;
     }
 
     public static Boolean getRestart() {
@@ -41,5 +43,9 @@ public class Main {
 
     public static Boolean getDeployment() {
         return deployment;
+    }
+
+    public static ServerCommunicator getServerCommunicator() {
+        return serverCommunicator;
     }
 }

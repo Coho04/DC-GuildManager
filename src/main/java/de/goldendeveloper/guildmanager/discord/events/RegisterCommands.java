@@ -111,9 +111,9 @@ public class RegisterCommands extends ListenerAdapter {
     public void Settings(SlashCommandInteractionEvent e) {
         if (e.getMember().hasPermission(Permission.ADMINISTRATOR)) {
             if (e.getSubcommandName().equalsIgnoreCase(RegisterCommands.settingsSupJoinRole)) {
-                if (Main.getCreateMysql().getMysql().existsDatabase(MysqlConnection.dbName)) {
-                    if (Main.getCreateMysql().getMysql().getDatabase(MysqlConnection.dbName).existsTable(MysqlConnection.settingsTName)) {
-                        Table table = Main.getCreateMysql().getMysql().getDatabase(MysqlConnection.dbName).getTable(MysqlConnection.settingsTName);
+                if (Main.getMysqlConnection().getMysql().existsDatabase(MysqlConnection.dbName)) {
+                    if (Main.getMysqlConnection().getMysql().getDatabase(MysqlConnection.dbName).existsTable(MysqlConnection.settingsTName)) {
+                        Table table = Main.getMysqlConnection().getMysql().getDatabase(MysqlConnection.dbName).getTable(MysqlConnection.settingsTName);
                         if (table.existsColumn(MysqlConnection.colmGuild)) {
                             Role role = e.getOption(RegisterCommands.settingsSupJoinRoleOptionRole).getAsRole();
                             if (table.getColumn(MysqlConnection.colmGuild).getAll().getAsString().contains(e.getGuild().getId())) {
@@ -139,9 +139,9 @@ public class RegisterCommands extends ListenerAdapter {
                 }
             } else if (e.getSubcommandName().equalsIgnoreCase(RegisterCommands.settingsSupWMessage)) {
                 e.deferReply().queue();
-                if (Main.getCreateMysql().getMysql().existsDatabase(MysqlConnection.dbName)) {
-                    if (Main.getCreateMysql().getMysql().getDatabase(MysqlConnection.dbName).existsTable(MysqlConnection.settingsTName)) {
-                        Table table = Main.getCreateMysql().getMysql().getDatabase(MysqlConnection.dbName).getTable(MysqlConnection.settingsTName);
+                if (Main.getMysqlConnection().getMysql().existsDatabase(MysqlConnection.dbName)) {
+                    if (Main.getMysqlConnection().getMysql().getDatabase(MysqlConnection.dbName).existsTable(MysqlConnection.settingsTName)) {
+                        Table table = Main.getMysqlConnection().getMysql().getDatabase(MysqlConnection.dbName).getTable(MysqlConnection.settingsTName);
                         if (table.existsColumn(MysqlConnection.colmGuild)) {
                             TextChannel channel = e.getOption(RegisterCommands.settingsSupWMessageOptionChannel).getAsChannel().asTextChannel();
                             if (channel != null) {
@@ -290,7 +290,7 @@ public class RegisterCommands extends ListenerAdapter {
         if (e.getUser() == zRazzer || e.getUser() == _Coho04_) {
             try {
                 e.getInteraction().reply("Der Discord Bot [" + e.getJDA().getSelfUser().getName() + "] wird nun neugestartet!").queue();
-                Process p = Runtime.getRuntime().exec("screen -AmdS " + Main.getDiscord().getProjektName() + " java -Xms1096M -Xmx1096M -jar " + Main.getDiscord().getProjektName() + "-" + Main.getDiscord().getProjektVersion() + ".jar restart");
+                Process p = Runtime.getRuntime().exec("screen -AmdS " + Main.getConfig().getProjektName() + " java -Xms1096M -Xmx1096M -jar " + Main.getConfig().getProjektName() + "-" + Main.getConfig().getProjektVersion() + ".jar restart");
                 p.waitFor();
                 e.getJDA().shutdown();
             } catch (Exception ex) {
