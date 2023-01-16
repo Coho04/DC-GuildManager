@@ -83,7 +83,7 @@ public class Config {
                     Element element = (Element) list.item(i);
                     String webhook = element.getElementsByTagName("Webhook").item(0).getTextContent();
                     String server = element.getElementsByTagName("Server").item(0).getTextContent();
-                    String token = doc.getElementsByTagName("Token").item(0).getTextContent();
+                    String token = element.getElementsByTagName("Token").item(0).getTextContent();
                     if (!webhook.isEmpty() || !webhook.isBlank()) {
                         this.DiscordWebhook = webhook;
                     }
@@ -96,19 +96,14 @@ public class Config {
                 }
             }
 
-            list = doc.getElementsByTagName("Server");
-            for (int i = 0; i < list.getLength(); i++) {
-                if (list.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) list.item(i);
-                    String hostname = element.getElementsByTagName("Hostname").item(1).getTextContent();
-                    String port = doc.getElementsByTagName("Port").item(1).getTextContent();
-                    if (!hostname.isEmpty() || !hostname.isBlank()) {
-                        this.ServerHostname = hostname;
-                    }
-                    if (!port.isEmpty() || !port.isBlank()) {
-                        this.ServerPort = Integer.parseInt(port);
-                    }
-                }
+            // Server
+            String hostname = doc.getElementsByTagName("Hostname").item(1).getTextContent();
+            String port = doc.getElementsByTagName("Port").item(1).getTextContent();
+            if (!hostname.isEmpty() || !hostname.isBlank()) {
+                this.ServerHostname = hostname;
+            }
+            if (!port.isEmpty() || !port.isBlank()) {
+                this.ServerPort = Integer.parseInt(port);
             }
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
