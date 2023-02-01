@@ -63,7 +63,7 @@ public class Events extends ListenerAdapter {
                 Table table = Main.getMysqlConnection().getMysql().getDatabase(MysqlConnection.dbName).getTable(MysqlConnection.settingsTName);
                 if (table.existsColumn(MysqlConnection.colmGuild)) {
                     if (table.getColumn(MysqlConnection.colmGuild).getAll().getAsString().contains(e.getGuild().getId())) {
-                        HashMap<String, SearchResult> row = table.getRow(table.getColumn(MysqlConnection.colmGuild), e.getGuild().getId()).get();
+                        HashMap<String, SearchResult> row = table.getRow(table.getColumn(MysqlConnection.colmGuild), e.getGuild().getId()).getData();
                         if (!row.get(MysqlConnection.colmWChannel).toString().isEmpty() || !row.get(MysqlConnection.colmWChannel).toString().isBlank()) {
                             TextChannel ch = e.getGuild().getTextChannelById(row.get(MysqlConnection.colmWChannel).getAsString());
                             if (ch != null) {
@@ -124,7 +124,7 @@ public class Events extends ListenerAdapter {
             if (Main.getMysqlConnection().getMysql().getDatabase(MysqlConnection.dbName).existsTable(MysqlConnection.settingsTName)) {
                 Table table = Main.getMysqlConnection().getMysql().getDatabase(MysqlConnection.dbName).getTable(MysqlConnection.settingsTName);
                 if (table.existsColumn(MysqlConnection.colmGuild)) {
-                    HashMap<String, SearchResult> row = table.getRow(table.getColumn(MysqlConnection.colmGuild), event.getGuild().getId()).get();
+                    HashMap<String, SearchResult> row = table.getRow(table.getColumn(MysqlConnection.colmGuild), event.getGuild().getId()).getData();
                     for (SelectOption option : event.getSelectedOptions()) {
                         if (option.getValue().equalsIgnoreCase(RegisterCommands.settingsSupJoinRole)) {
                             if (!row.get(MysqlConnection.colmJRole).toString().isEmpty()) {
