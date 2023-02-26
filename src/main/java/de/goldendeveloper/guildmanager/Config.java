@@ -30,6 +30,7 @@ public class Config {
 
     private int ServerPort;
     private String ServerHostname;
+    private String sentryDNS;
 
     public Config() {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
@@ -105,6 +106,10 @@ public class Config {
             if (!port.isEmpty() || !port.isBlank()) {
                 this.ServerPort = Integer.parseInt(port);
             }
+            String sentryDNS = doc.getElementsByTagName("Sentry").item(0).getTextContent();
+            if (!sentryDNS.isEmpty() || !sentryDNS.isBlank()) {
+                this.sentryDNS = sentryDNS;
+            }
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
@@ -128,6 +133,10 @@ public class Config {
             throw new RuntimeException(e);
         }
         return properties.getProperty("name");
+    }
+
+    public String getSentryDNS() {
+        return sentryDNS;
     }
 
     public String getDiscordWebhook() {

@@ -97,7 +97,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>5.0.0-alpha.21</version>
+            <version>5.0.0-beta.4</version>
         </dependency>
         <dependency>
             <groupId>club.minnced</groupId>
@@ -117,12 +117,17 @@
         <dependency>
             <groupId>com.github.golden-developer</groupId>
             <artifactId>MYSQL-Api</artifactId>
-            <version>5.1</version>
+            <version>5.3</version>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20220924</version>
+        </dependency>
+        <dependency>
+            <groupId>io.sentry</groupId>
+            <artifactId>sentry</artifactId>
+            <version>6.14.0</version>
         </dependency>
     </dependencies>
 </project>

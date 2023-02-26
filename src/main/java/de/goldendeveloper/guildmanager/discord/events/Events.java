@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
-import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -119,7 +119,7 @@ public class Events extends ListenerAdapter {
     }
 
     @Override
-    public void onSelectMenuInteraction(@NotNull SelectMenuInteractionEvent event) {
+    public void onStringSelectInteraction(@NotNull StringSelectInteractionEvent event) {
         if (Main.getMysqlConnection().getMysql().existsDatabase(MysqlConnection.dbName)) {
             if (Main.getMysqlConnection().getMysql().getDatabase(MysqlConnection.dbName).existsTable(MysqlConnection.settingsTName)) {
                 Table table = Main.getMysqlConnection().getMysql().getDatabase(MysqlConnection.dbName).getTable(MysqlConnection.settingsTName);
@@ -151,7 +151,6 @@ public class Events extends ListenerAdapter {
     public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent e) {
         String cmd = e.getName();
         if (cmd.equalsIgnoreCase(RegisterCommands.Ban)) {
-            System.out.println(e.getFocusedOption().getName());
             if (e.getFocusedOption().getName().equalsIgnoreCase(RegisterCommands.BanOptionTime)) {
                 e.getInteraction().replyChoices(
                         new Command.Choice("Permanent", 9999),

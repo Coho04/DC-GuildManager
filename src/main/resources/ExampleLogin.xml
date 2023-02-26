@@ -10,6 +10,7 @@
         <Token>TOKEN</Token>
         <Webhook>WEBHOOK</Webhook>
     </Discord>
+    <Sentry>SENTRY</Sentry>
     <Server>
         <Hostname>HOSTNAME</Hostname>
         <Port>PORT</Port>

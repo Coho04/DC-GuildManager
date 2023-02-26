@@ -1,6 +1,7 @@
 package de.goldendeveloper.guildmanager;
 
 import de.goldendeveloper.guildmanager.discord.Discord;
+import io.sentry.Sentry;
 
 public class Main {
 
@@ -22,10 +23,19 @@ public class Main {
             deployment = false;
         }
         config = new Config();
+        Sentry(config.getSentryDNS());
         serverCommunicator = new ServerCommunicator(config.getServerHostname(), config.getServerPort());
         mysqlConnection = new MysqlConnection(config.getMysqlHostname(), config.getMysqlUsername(), config.getMysqlPassword(), config.getMysqlPort());
         discord = new Discord(config.getDiscordToken());
     }
+
+    public static void Sentry(String dns) {
+        Sentry.init(options -> {
+            options.setDsn(dns);
+            options.setTracesSampleRate(1.0);
+        });
+    }
+
 
     public static Discord getDiscord() {
         return discord;

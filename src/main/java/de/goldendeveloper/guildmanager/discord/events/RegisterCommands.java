@@ -4,6 +4,7 @@ import de.goldendeveloper.guildmanager.MysqlConnection;
 import de.goldendeveloper.guildmanager.Main;
 import de.goldendeveloper.mysql.entities.RowBuilder;
 import de.goldendeveloper.mysql.entities.Table;
+import io.sentry.Sentry;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
@@ -13,7 +14,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
-import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -174,7 +175,7 @@ public class RegisterCommands extends ListenerAdapter {
                 builder.setTitle("**Remove Option**");
                 builder.setDescription("Entferne hier eine eingestellte Option für diesen Discord Server");
                 e.getInteraction().replyEmbeds(builder.build()).addActionRow(
-                        SelectMenu.create("removeSelect")
+                        StringSelectMenu.create("removeSelect")
                                 .addOption("Join Role", RegisterCommands.settingsSupJoinRole)
                                 .addOption("Willkommens Nachricht", RegisterCommands.settingsSupWMessage)
                                 .build()
@@ -294,6 +295,7 @@ public class RegisterCommands extends ListenerAdapter {
                 p.waitFor();
                 e.getJDA().shutdown();
             } catch (Exception ex) {
+                Sentry.captureException(ex);
                 ex.printStackTrace();
             }
         } else {
