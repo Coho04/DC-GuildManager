@@ -72,7 +72,7 @@ public class Events extends ListenerAdapter {
                 if (table.existsColumn(MysqlConnection.colmGuild)) {
                     if (table.getColumn(MysqlConnection.colmGuild).getAll().getAsString().contains(e.getGuild().getId())) {
                         HashMap<String, SearchResult> row = table.getRow(table.getColumn(MysqlConnection.colmGuild), e.getGuild().getId()).getData();
-                        if (!row.get(MysqlConnection.colmWChannel).toString().isEmpty() || !row.get(MysqlConnection.colmWChannel).toString().isBlank()) {
+                        if (!row.get(MysqlConnection.colmWChannel).getAsString().isEmpty() || !row.get(MysqlConnection.colmWChannel).getAsString().isBlank()) {
                             TextChannel ch = e.getGuild().getTextChannelById(row.get(MysqlConnection.colmWChannel).getAsString());
                             if (ch != null) {
                                 User user = e.getMember().getUser();
@@ -100,8 +100,8 @@ public class Events extends ListenerAdapter {
                                 }
                             }
                         }
-                        if (!row.get(MysqlConnection.colmJRole).toString().isEmpty() || !row.get(MysqlConnection.colmJRole).toString().isBlank()) {
-                            Role role = e.getGuild().getRoleById(row.get(MysqlConnection.colmJRole).toString());
+                        if (!row.get(MysqlConnection.colmJRole).getAsString().isEmpty() || !row.get(MysqlConnection.colmJRole).getAsString().isBlank()) {
+                            Role role = e.getGuild().getRoleById(row.get(MysqlConnection.colmJRole).getAsString());
                             Member bot = e.getGuild().getMember(e.getJDA().getSelfUser());
                             if (role != null && bot != null && bot.canInteract(role)) {
                                     e.getGuild().addRoleToMember(e.getMember(), role).queue();
@@ -135,14 +135,14 @@ public class Events extends ListenerAdapter {
                     HashMap<String, SearchResult> row = table.getRow(table.getColumn(MysqlConnection.colmGuild), event.getGuild().getId()).getData();
                     for (SelectOption option : event.getSelectedOptions()) {
                         if (option.getValue().equalsIgnoreCase(RegisterCommands.settingsSupJoinRole)) {
-                            if (!row.get(MysqlConnection.colmJRole).toString().isEmpty()) {
+                            if (!row.get(MysqlConnection.colmJRole).getAsString().isEmpty()) {
                                 table.getRow(table.getColumn(MysqlConnection.colmGuild), event.getGuild().getId()).set(table.getColumn(MysqlConnection.colmJRole), "");
                                 event.getInteraction().reply("Die Einstellung für die Join Rolle wurde entfernt").queue();
                             } else {
                                 event.getInteraction().reply("Es ist keine Einstellung mit dieser Option vorhanden!").queue();
                             }
                         } else if (option.getValue().equalsIgnoreCase(RegisterCommands.settingsSupWMessage)) {
-                            if (!row.get(MysqlConnection.colmWChannel).toString().isEmpty()) {
+                            if (!row.get(MysqlConnection.colmWChannel).getAsString().isEmpty()) {
                                 table.getRow(table.getColumn(MysqlConnection.colmGuild), event.getGuild().getId()).set(table.getColumn(MysqlConnection.colmWChannel), "");
                                 event.getInteraction().reply("Die Einstellung für die Willkommens Nachricht wurde entfernt").queue();
                             } else {
