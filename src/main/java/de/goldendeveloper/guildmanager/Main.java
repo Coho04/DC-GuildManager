@@ -17,16 +17,20 @@ public class Main {
         if (args.length >= 1 && args[0].equalsIgnoreCase("restart")) {
             restart = true;
         }
-
         String device = System.getProperty("os.name").split(" ")[0];
         if (device.equalsIgnoreCase("windows") || device.equalsIgnoreCase("Mac")) {
             deployment = false;
         }
         config = new Config();
         Sentry(config.getSentryDNS());
-        serverCommunicator = new ServerCommunicator(config.getServerHostname(), config.getServerPort());
-        mysqlConnection = new MysqlConnection(config.getMysqlHostname(), config.getMysqlUsername(), config.getMysqlPassword(), config.getMysqlPort());
-        discord = new Discord(config.getDiscordToken());
+        try {
+            serverCommunicator = new ServerCommunicator(config.getServerHostname(), config.getServerPort());
+            mysqlConnection = new MysqlConnection(config.getMysqlHostname(), config.getMysqlUsername(), config.getMysqlPassword(), config.getMysqlPort());
+            discord = new Discord(config.getDiscordToken());
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            Sentry.captureException(exception);
+        }
     }
 
     public static void Sentry(String dns) {
@@ -35,7 +39,6 @@ public class Main {
             options.setTracesSampleRate(1.0);
         });
     }
-
 
     public static Discord getDiscord() {
         return discord;
