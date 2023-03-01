@@ -7,9 +7,11 @@ import de.goldendeveloper.guildmanager.MysqlConnection;
 import de.goldendeveloper.guildmanager.Main;
 import de.goldendeveloper.mysql.entities.SearchResult;
 import de.goldendeveloper.mysql.entities.Table;
+import io.sentry.Sentry;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
@@ -26,6 +28,12 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class Events extends ListenerAdapter {
+
+    @Override
+    public void onException(ExceptionEvent event) {
+        Sentry.captureException(event.getCause());
+        event.getCause().printStackTrace();
+    }
 
     @Override
     public void onShutdown(@NotNull ShutdownEvent e) {
