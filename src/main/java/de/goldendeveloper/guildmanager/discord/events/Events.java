@@ -11,7 +11,6 @@ import io.sentry.Sentry;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
@@ -52,7 +51,7 @@ public class Events extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildJoin(GuildJoinEvent e) {
+    public void onGuildJoin(@NotNull GuildJoinEvent e) {
         try {
             Main.getServerCommunicator().addServer(e.getGuild().getId());
             e.getJDA().getPresence().setActivity(Activity.playing("/help | " + e.getJDA().getGuilds().size() + " Servern"));
@@ -63,7 +62,7 @@ public class Events extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildLeave(GuildLeaveEvent e) {
+    public void onGuildLeave(@NotNull GuildLeaveEvent e) {
         try {
             Main.getServerCommunicator().removeServer(e.getGuild().getId());
             e.getJDA().getPresence().setActivity(Activity.playing("/help | " + e.getJDA().getGuilds().size() + " Servern"));
@@ -175,7 +174,7 @@ public class Events extends ListenerAdapter {
     }
 
     @Override
-    public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent e) {
+    public void onCommandAutoCompleteInteraction(@NotNull CommandAutoCompleteInteractionEvent e) {
         try {
             String cmd = e.getName();
             if (cmd.equalsIgnoreCase(RegisterCommands.Ban)) {
