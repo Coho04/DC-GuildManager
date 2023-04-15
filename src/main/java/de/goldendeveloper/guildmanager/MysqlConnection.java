@@ -8,7 +8,7 @@ import de.goldendeveloper.mysql.entities.Table;
 public class MysqlConnection {
 
     private final MYSQL mysql;
-    public static String dbName = "GDGuildManager";
+    public static String dbName = "GD-GuildManager";
     public static String settingsTName = "Settings";
     public static String colmGuild = "Guild";
     public static String colmWChannel = "WelcomeChannel";
