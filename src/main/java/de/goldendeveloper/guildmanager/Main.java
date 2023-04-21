@@ -1,7 +1,9 @@
 package de.goldendeveloper.guildmanager;
 
 import de.goldendeveloper.guildmanager.discord.Discord;
+import io.sentry.ITransaction;
 import io.sentry.Sentry;
+import io.sentry.SpanStatus;
 
 public class Main {
 
@@ -23,8 +25,22 @@ public class Main {
         }
         config = new Config();
         Sentry(config.getSentryDNS());
+        ITransaction transaction = Sentry.startTransaction("Application()", "task");
         try {
-            serverCommunicator = new ServerCommunicator(config.getServerHostname(), config.getServerPort());
+            Application();
+        } catch (Exception e) {
+            transaction.setThrowable(e);
+            transaction.setStatus(SpanStatus.INTERNAL_ERROR);
+        } finally {
+            transaction.finish();
+        }
+    }
+
+    public static void Application() {
+        try {
+            if (getDeployment()) {
+                serverCommunicator = new ServerCommunicator(config.getServerHostname(), config.getServerPort());
+            }
             mysqlConnection = new MysqlConnection(config.getMysqlHostname(), config.getMysqlUsername(), config.getMysqlPassword(), config.getMysqlPort());
             discord = new Discord(config.getDiscordToken());
         } catch (Exception exception) {
@@ -37,6 +53,7 @@ public class Main {
         Sentry.init(options -> {
             options.setDsn(dns);
             options.setTracesSampleRate(1.0);
+            options.setEnvironment(Main.getDeployment() ? "Production" : "localhost");
         });
     }
 
