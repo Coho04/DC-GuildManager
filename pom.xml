@@ -88,6 +88,11 @@
 
     <repositories>
         <repository>
+            <id>golden-developer</id>
+            <name>Golden-Developer</name>
+            <url>https://nexus.golden-developer.de/repository/DCB-CORE/</url>
+        </repository>
+        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
@@ -133,6 +138,11 @@
             <groupId>io.github.cdimascio</groupId>
             <artifactId>dotenv-java</artifactId>
             <version>2.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>de.goldendeveloper</groupId>
+            <artifactId>DCB-Core</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 </project>

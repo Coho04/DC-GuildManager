@@ -1,83 +1,67 @@
 package de.goldendeveloper.guildmanager;
 
-import de.goldendeveloper.guildmanager.discord.Discord;
-import io.sentry.ITransaction;
-import io.sentry.Sentry;
-import io.sentry.SpanStatus;
+import de.goldendeveloper.dcbcore.DCBotBuilder;
+import de.goldendeveloper.dcbcore.interfaces.CommandInterface;
+import de.goldendeveloper.guildmanager.discord.commands.*;
+import de.goldendeveloper.guildmanager.discord.events.CustomEvents;
+import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+
+import java.util.LinkedList;
+import java.util.stream.Stream;
 
 public class Main {
 
-    private static Discord discord;
-    private static Config config;
     private static MysqlConnection mysqlConnection;
-    private static ServerCommunicator serverCommunicator;
-
-    private static Boolean restart = false;
-    private static Boolean deployment = true;
 
     public static void main(String[] args) {
-        if (args.length >= 1 && args[0].equalsIgnoreCase("restart")) {
-            restart = true;
-        }
-        String device = System.getProperty("os.name").split(" ")[0];
-        if (device.equalsIgnoreCase("windows") || device.equalsIgnoreCase("Mac")) {
-            deployment = false;
-        }
-        config = new Config();
-        Sentry(config.getSentryDNS());
-        ITransaction transaction = Sentry.startTransaction("Application()", "task");
-        try {
-            Application();
-        } catch (Exception e) {
-            transaction.setThrowable(e);
-            transaction.setStatus(SpanStatus.INTERNAL_ERROR);
-        } finally {
-            transaction.finish();
-        }
+        CustomConfig customConfig = new CustomConfig();
+
+        DCBotBuilder dcBotBuilder = new DCBotBuilder(args);
+        dcBotBuilder.registerCommands(getCustomCommands());
+        dcBotBuilder.registerEvents(new CustomEvents());
+        dcBotBuilder.build();
+
+        mysqlConnection = new MysqlConnection(customConfig.getMysqlHostname(), customConfig.getMysqlUsername(), customConfig.getMysqlPassword(), customConfig.getMysqlPort());
     }
 
-    public static void Application() {
-        try {
-            if (getDeployment()) {
-                serverCommunicator = new ServerCommunicator(config.getServerHostname(), config.getServerPort());
-            }
-            mysqlConnection = new MysqlConnection(config.getMysqlHostname(), config.getMysqlUsername(), config.getMysqlPassword(), config.getMysqlPort());
-            discord = new Discord(config.getDiscordToken());
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            Sentry.captureException(exception);
-        }
-    }
-
-    public static void Sentry(String dns) {
-        Sentry.init(options -> {
-            options.setDsn(dns);
-            options.setTracesSampleRate(1.0);
-            options.setEnvironment(Main.getDeployment() ? "Production" : "localhost");
-        });
-    }
-
-    public static Discord getDiscord() {
-        return discord;
-    }
-
-    public static Config getConfig() {
-        return config;
+    public static LinkedList<CommandInterface> getCustomCommands() {
+        LinkedList<CommandInterface> commandDataList = new LinkedList<>();
+        commandDataList.add(new Ban());
+        commandDataList.add(new Birthday());
+        commandDataList.add(new Clear());
+        commandDataList.add(new JoinChannel());
+        commandDataList.add(new Kick());
+        commandDataList.add(new LeaveChannel());
+        commandDataList.add(new ServerOwner());
+        commandDataList.add(new ServerStats());
+        commandDataList.add(new Settings());
+        commandDataList.add(new TimeOut());
+        return commandDataList;
     }
 
     public static MysqlConnection getMysqlConnection() {
         return mysqlConnection;
     }
 
-    public static Boolean getRestart() {
-        return restart;
+    public static int getOnlineUsers(Guild guild) {
+        Stream<Member> members = guild.getMembers().stream().filter(m -> m.getOnlineStatus() != OnlineStatus.OFFLINE && m.getOnlineStatus() != OnlineStatus.INVISIBLE);
+        return Long.valueOf(members.count()).intValue();
     }
 
-    public static Boolean getDeployment() {
-        return deployment;
+    public static int getDoNotDisturbUsers(Guild guild) {
+        Stream<Member> members = guild.getMembers().stream().filter(m -> m.getOnlineStatus() != OnlineStatus.DO_NOT_DISTURB);
+        return Long.valueOf(members.count()).intValue();
     }
 
-    public static ServerCommunicator getServerCommunicator() {
-        return serverCommunicator;
+    public static int getAfkUsers(Guild guild) {
+        Stream<Member> members = guild.getMembers().stream().filter(m ->m.getOnlineStatus() != OnlineStatus.OFFLINE && m.getOnlineStatus() != OnlineStatus.INVISIBLE);
+        return Long.valueOf(members.count()).intValue();
+    }
+
+    public static int getOfflineUsers(Guild guild) {
+        Stream<Member> members = guild.getMembers().stream().filter(m ->m.getOnlineStatus() == OnlineStatus.OFFLINE);
+        return Long.valueOf(members.count()).intValue();
     }
 }

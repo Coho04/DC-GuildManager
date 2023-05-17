@@ -1,6 +1,6 @@
 package de.goldendeveloper.guildmanager;
 
-import de.goldendeveloper.guildmanager.errors.ExceptionHandler;
+import de.goldendeveloper.guildmanager.errors.CustomExceptionHandler;
 import de.goldendeveloper.mysql.MYSQL;
 import de.goldendeveloper.mysql.entities.Database;
 import de.goldendeveloper.mysql.entities.Table;
@@ -8,14 +8,14 @@ import de.goldendeveloper.mysql.entities.Table;
 public class MysqlConnection {
 
     private final MYSQL mysql;
-    public static String dbName = "GD-GuildManager";
-    public static String settingsTName = "Settings";
-    public static String colmGuild = "Guild";
-    public static String colmWChannel = "WelcomeChannel";
-    public static String colmJRole = "JoinRole";
+    public static final String dbName = "GD-GuildManager";
+    public static final String settingsTName = "Settings";
+    public static final String colmGuild = "Guild";
+    public static final String colmWChannel = "WelcomeChannel";
+    public static final String colmJRole = "JoinRole";
 
     public MysqlConnection(String hostname, String username, String password, int port) {
-        mysql = new MYSQL(hostname, username, password, port, new ExceptionHandler());
+        mysql = new MYSQL(hostname, username, password, port, new CustomExceptionHandler());
         if (!mysql.existsDatabase(dbName)) {
             mysql.createDatabase(dbName);
         }
