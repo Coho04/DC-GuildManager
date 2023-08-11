@@ -2,6 +2,8 @@ package de.goldendeveloper.guildmanager.discord.commands;
 
 import de.goldendeveloper.dcbcore.DCBot;
 import de.goldendeveloper.dcbcore.interfaces.CommandInterface;
+import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -36,13 +38,13 @@ public class Kick implements CommandInterface {
                         e.getInteraction().reply("Der User " + member.getUser().getName() + " wurde erfolgreich gekickt!").queue();
                     }
                 } else {
-                    e.getInteraction().reply(dcBot.getDiscord().hasError("User ist NULL")).queue();
+                    Sentry.captureMessage("User ist NULL", SentryLevel.ERROR);
                 }
             } else {
                 e.getInteraction().reply("[ERROR]: Für den Command hast du nicht genügend Rechte").queue();
             }
         } else {
-            e.getInteraction().reply(dcBot.getDiscord().hasError("CMD User ist NULL")).queue();
+            Sentry.captureMessage("CMD User ist NULL", SentryLevel.ERROR);
         }
     }
 }

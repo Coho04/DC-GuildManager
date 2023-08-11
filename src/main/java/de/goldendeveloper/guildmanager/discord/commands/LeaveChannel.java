@@ -2,6 +2,8 @@ package de.goldendeveloper.guildmanager.discord.commands;
 
 import de.goldendeveloper.dcbcore.DCBot;
 import de.goldendeveloper.dcbcore.interfaces.CommandInterface;
+import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -25,13 +27,13 @@ public class LeaveChannel implements CommandInterface {
                     e.getJDA().getDirectAudioController().disconnect(guild);
                     e.getInteraction().reply("Ich habe erfolgreich deinen Channel verlassen!").queue();
                 } else {
-                    e.getInteraction().reply(dcBot.getDiscord().hasError("Du bist in keinem VoiceChannel!")).queue();
+                    Sentry.captureMessage("Du bist in keinem VoiceChannel!", SentryLevel.ERROR);
                 }
             } else {
-                e.getInteraction().reply(dcBot.getDiscord().hasError("VoiceState is NULL")).queue();
+                Sentry.captureMessage("VoiceState is NULL", SentryLevel.ERROR);
             }
         } else {
-            e.getInteraction().reply(dcBot.getDiscord().hasError("Benutzer is NULL")).queue();
+            Sentry.captureMessage("Benutzer is NULL", SentryLevel.ERROR);
         }
     }
 }

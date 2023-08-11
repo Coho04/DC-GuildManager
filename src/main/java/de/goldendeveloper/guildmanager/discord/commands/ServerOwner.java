@@ -2,6 +2,8 @@ package de.goldendeveloper.guildmanager.discord.commands;
 
 import de.goldendeveloper.dcbcore.DCBot;
 import de.goldendeveloper.dcbcore.interfaces.CommandInterface;
+import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
@@ -26,13 +28,13 @@ public class ServerOwner implements CommandInterface {
                 if (!user.getName().isEmpty()) {
                     e.getInteraction().reply("Der Serverinhaber ist: " + e.getGuild().getOwner().getUser().getName()).queue();
                 } else {
-                    e.getInteraction().reply(dcBot.getDiscord().hasError("Owner Name ist NULL")).queue();
+                    Sentry.captureMessage("Owner Name ist NULL", SentryLevel.ERROR);
                 }
             } else {
-                e.getInteraction().reply(dcBot.getDiscord().hasError("Owner ist NULL")).queue();
+                Sentry.captureMessage("Owner ist NULL", SentryLevel.ERROR);
             }
         } else {
-            e.getInteraction().reply(dcBot.getDiscord().hasError("Guild ist NULL")).queue();
+            Sentry.captureMessage("Guild ist NULL", SentryLevel.ERROR);
         }
     }
 }

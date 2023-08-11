@@ -2,6 +2,8 @@ package de.goldendeveloper.guildmanager.discord.commands;
 
 import de.goldendeveloper.dcbcore.DCBot;
 import de.goldendeveloper.dcbcore.interfaces.CommandInterface;
+import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -26,16 +28,16 @@ public class JoinChannel implements CommandInterface  {
                         e.getJDA().getDirectAudioController().connect(voice.getChannel());
                         e.getInteraction().reply("Ich habe erfolgreich deinen Channel betreten!").queue();
                     } else {
-                        e.getInteraction().reply(dcBot.getDiscord().hasError("Du bist in keinem VoiceChannel!")).queue();
+                        Sentry.captureMessage("Du bist in keinem VoiceChannel!", SentryLevel.ERROR);
                     }
                 } else {
-                    e.getInteraction().reply(dcBot.getDiscord().hasError("Voice Channel is NULL")).queue();
+                    Sentry.captureMessage("Voice Channel is NULL", SentryLevel.ERROR);
                 }
             } else {
-                e.getInteraction().reply(dcBot.getDiscord().hasError("VoiceState is NULL")).queue();
+                Sentry.captureMessage("VoiceState is NULL", SentryLevel.ERROR);
             }
         } else {
-            e.getInteraction().reply(dcBot.getDiscord().hasError("Member is NULL")).queue();
+            Sentry.captureMessage("Member is NULL", SentryLevel.ERROR);
         }
     }
 }

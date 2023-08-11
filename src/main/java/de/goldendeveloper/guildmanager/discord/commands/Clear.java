@@ -2,6 +2,8 @@ package de.goldendeveloper.guildmanager.discord.commands;
 
 import de.goldendeveloper.dcbcore.DCBot;
 import de.goldendeveloper.dcbcore.interfaces.CommandInterface;
+import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -40,7 +42,7 @@ public class Clear implements CommandInterface {
                     }
                 }
             } else {
-                e.getInteraction().reply(dcBot.getDiscord().hasError("CMD User ist NULL")).queue();
+                Sentry.captureMessage("CMD User ist NULL", SentryLevel.ERROR);
             }
         }
     }

@@ -2,6 +2,8 @@ package de.goldendeveloper.guildmanager.discord.commands;
 
 import de.goldendeveloper.dcbcore.DCBot;
 import de.goldendeveloper.dcbcore.interfaces.CommandInterface;
+import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -32,7 +34,7 @@ public class Birthday implements CommandInterface {
             }
             e.getInteraction().reply("Dem User wurde erfolgreich gratuliert!").queue();
         } else {
-            e.getInteraction().reply(dcBot.getDiscord().hasError("CMD Member ist NULL")).queue();
+            Sentry.captureMessage("CMD Member ist NULL", SentryLevel.ERROR);
         }
     }
 }

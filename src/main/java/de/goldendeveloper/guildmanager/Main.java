@@ -19,26 +19,11 @@ public class Main {
         CustomConfig customConfig = new CustomConfig();
 
         DCBotBuilder dcBotBuilder = new DCBotBuilder(args);
-        dcBotBuilder.registerCommands(getCustomCommands());
+        dcBotBuilder.registerCommands(new Ban(), new Birthday(), new Clear(), new JoinChannel(), new Kick(), new LeaveChannel(), new ServerOwner(), new ServerStats(), new Settings(), new TimeOut());
         dcBotBuilder.registerEvents(new CustomEvents());
         dcBotBuilder.build();
 
         mysqlConnection = new MysqlConnection(customConfig.getMysqlHostname(), customConfig.getMysqlUsername(), customConfig.getMysqlPassword(), customConfig.getMysqlPort());
-    }
-
-    public static LinkedList<CommandInterface> getCustomCommands() {
-        LinkedList<CommandInterface> commandDataList = new LinkedList<>();
-        commandDataList.add(new Ban());
-        commandDataList.add(new Birthday());
-        commandDataList.add(new Clear());
-        commandDataList.add(new JoinChannel());
-        commandDataList.add(new Kick());
-        commandDataList.add(new LeaveChannel());
-        commandDataList.add(new ServerOwner());
-        commandDataList.add(new ServerStats());
-        commandDataList.add(new Settings());
-        commandDataList.add(new TimeOut());
-        return commandDataList;
     }
 
     public static MysqlConnection getMysqlConnection() {
@@ -46,22 +31,18 @@ public class Main {
     }
 
     public static int getOnlineUsers(Guild guild) {
-        Stream<Member> members = guild.getMembers().stream().filter(m -> m.getOnlineStatus() != OnlineStatus.OFFLINE && m.getOnlineStatus() != OnlineStatus.INVISIBLE);
-        return Long.valueOf(members.count()).intValue();
+        return Long.valueOf(guild.getMembers().stream().filter(m -> m.getOnlineStatus() != OnlineStatus.OFFLINE && m.getOnlineStatus() != OnlineStatus.INVISIBLE).count()).intValue();
     }
 
     public static int getDoNotDisturbUsers(Guild guild) {
-        Stream<Member> members = guild.getMembers().stream().filter(m -> m.getOnlineStatus() != OnlineStatus.DO_NOT_DISTURB);
-        return Long.valueOf(members.count()).intValue();
+        return Long.valueOf(guild.getMembers().stream().filter(m -> m.getOnlineStatus() != OnlineStatus.DO_NOT_DISTURB).count()).intValue();
     }
 
     public static int getAfkUsers(Guild guild) {
-        Stream<Member> members = guild.getMembers().stream().filter(m ->m.getOnlineStatus() != OnlineStatus.OFFLINE && m.getOnlineStatus() != OnlineStatus.INVISIBLE);
-        return Long.valueOf(members.count()).intValue();
+        return Long.valueOf(guild.getMembers().stream().filter(m -> m.getOnlineStatus() != OnlineStatus.OFFLINE && m.getOnlineStatus() != OnlineStatus.INVISIBLE).count()).intValue();
     }
 
     public static int getOfflineUsers(Guild guild) {
-        Stream<Member> members = guild.getMembers().stream().filter(m ->m.getOnlineStatus() == OnlineStatus.OFFLINE);
-        return Long.valueOf(members.count()).intValue();
+        return Long.valueOf(guild.getMembers().stream().filter(m -> m.getOnlineStatus() == OnlineStatus.OFFLINE).count()).intValue();
     }
 }
