@@ -20,7 +20,7 @@ public class Main {
     public static void main(String[] args) throws NoConnectionException, SQLException {
         CustomConfig customConfig = new CustomConfig();
 
-        DCBotBuilder dcBotBuilder = new DCBotBuilder(args);
+        DCBotBuilder dcBotBuilder = new DCBotBuilder(args, true);
         dcBotBuilder.registerCommands(new Ban(), new Birthday(), new Clear(), new JoinChannel(), new Kick(), new LeaveChannel(), new ServerOwner(), new ServerStats(), new Settings(), new TimeOut());
         dcBotBuilder.registerEvents(new CustomEvents());
         dcBotBuilder.build();
