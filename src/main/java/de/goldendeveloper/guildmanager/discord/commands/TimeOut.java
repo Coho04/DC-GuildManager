@@ -27,26 +27,29 @@ public class TimeOut implements CommandInterface {
 
     @Override
     public void runSlashCommand(SlashCommandInteractionEvent e, DCBot dcBot) {
-        Member m = e.getMember();
-        if (m != null) {
-            if (m.hasPermission(Permission.ADMINISTRATOR)) {
-                Member member = e.getOption(optionUser).getAsMember();
-                long time = e.getOption(optionTime).getAsLong();
-                if (member != null) {
-                    if (time >= 0) {
-                        member.timeoutFor(time, TimeUnit.MINUTES).queue();
-                        e.getInteraction().reply("Der User " + member.getUser().getName() + " hat erfolgreich einen timeout bekommen!").queue();
-                    } else {
-                        Sentry.captureMessage("Timeout Dauer is 0", SentryLevel.ERROR);
-                    }
-                } else {
-                    Sentry.captureMessage("User ist NULL", SentryLevel.ERROR);
-                }
+        Member member = e.getMember();
+        if (member == null) {
+            e.reply("Ein fehler ist aufgetreten! Bitte versuche es später noch einmal!").queue();
+            Sentry.captureMessage("CMD User ist NULL", SentryLevel.ERROR);
+            return;
+        }
+        if (member.hasPermission(Permission.ADMINISTRATOR)) {
+            Member targetMember = e.getOption(optionUser).getAsMember();
+            long time = e.getOption(optionTime).getAsLong();
+            if (targetMember == null) {
+                e.reply("Ein fehler ist aufgetreten! Bitte versuche es später noch einmal!").queue();
+                Sentry.captureMessage("User ist NULL", SentryLevel.ERROR);
+                return;
+            }
+            if (time >= 0) {
+                targetMember.timeoutFor(time, TimeUnit.MINUTES).queue();
+                e.getInteraction().reply("Der User " + targetMember.getUser().getName() + " hat erfolgreich einen timeout bekommen!").queue();
             } else {
-                e.getInteraction().reply("[ERROR]: Für den Command hast du nicht genügend Rechte").queue();
+                e.reply("Ein fehler ist aufgetreten! Bitte versuche es später noch einmal!").queue();
+                Sentry.captureMessage("Timeout Dauer is 0", SentryLevel.ERROR);
             }
         } else {
-            Sentry.captureMessage("CMD User ist NULL", SentryLevel.ERROR);
+            e.getInteraction().reply("[ERROR]: Für den Command hast du nicht genügend Rechte").queue();
         }
     }
 }

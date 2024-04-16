@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
-public class JoinChannel implements CommandInterface  {
+public class JoinChannel implements CommandInterface {
 
     @Override
     public CommandData commandData() {
@@ -20,24 +20,30 @@ public class JoinChannel implements CommandInterface  {
     @Override
     public void runSlashCommand(SlashCommandInteractionEvent e, DCBot dcBot) {
         Member member = e.getMember();
-        if (member != null) {
-            GuildVoiceState voice = member.getVoiceState();
-            if (voice != null) {
-                if (voice.getChannel() != null) {
-                    if (voice.inAudioChannel()) {
-                        e.getJDA().getDirectAudioController().connect(voice.getChannel());
-                        e.getInteraction().reply("Ich habe erfolgreich deinen Channel betreten!").queue();
-                    } else {
-                        Sentry.captureMessage("Du bist in keinem VoiceChannel!", SentryLevel.ERROR);
-                    }
-                } else {
-                    Sentry.captureMessage("Voice Channel is NULL", SentryLevel.ERROR);
-                }
-            } else {
-                Sentry.captureMessage("VoiceState is NULL", SentryLevel.ERROR);
-            }
-        } else {
+        if (member == null) {
             Sentry.captureMessage("Member is NULL", SentryLevel.ERROR);
+            e.reply("Ein fehler ist aufgetreten! Bitte versuche es später noch einmal!").queue();
+            return;
+        }
+
+        GuildVoiceState voice = member.getVoiceState();
+        if (voice == null) {
+            Sentry.captureMessage("VoiceState is NULL", SentryLevel.ERROR);
+            e.reply("Ein fehler ist aufgetreten! Bitte versuche es später noch einmal!").queue();
+            return;
+        }
+
+        if (voice.getChannel() == null) {
+            Sentry.captureMessage("Voice Channel is NULL", SentryLevel.ERROR);
+            e.reply("Ein fehler ist aufgetreten! Bitte versuche es später noch einmal!").queue();
+            return;
+        }
+
+        if (voice.inAudioChannel()) {
+            e.getJDA().getDirectAudioController().connect(voice.getChannel());
+            e.getInteraction().reply("Ich habe erfolgreich deinen Channel betreten!").queue();
+        } else {
+            e.reply("Du bist in keinem VoiceChannel!").queue();
         }
     }
 }

@@ -22,19 +22,23 @@ public class ServerOwner implements CommandInterface {
     @Override
     public void runSlashCommand(SlashCommandInteractionEvent e, DCBot dcBot) {
         Guild guild = e.getGuild();
-        if (guild != null) {
-            if (guild.getOwner() != null) {
-                User user = guild.getOwner().getUser();
-                if (!user.getName().isEmpty()) {
-                    e.getInteraction().reply("Der Serverinhaber ist: " + e.getGuild().getOwner().getUser().getName()).queue();
-                } else {
-                    Sentry.captureMessage("Owner Name ist NULL", SentryLevel.ERROR);
-                }
-            } else {
-                Sentry.captureMessage("Owner ist NULL", SentryLevel.ERROR);
-            }
-        } else {
+        if (guild == null) {
+            e.reply("Ein fehler ist aufgetreten! Bitte versuche es später noch einmal!").queue();
             Sentry.captureMessage("Guild ist NULL", SentryLevel.ERROR);
+            return;
+        }
+
+        if (guild.getOwner() == null) {
+            e.reply("Ein fehler ist aufgetreten! Bitte versuche es später noch einmal!").queue();
+            Sentry.captureMessage("Guild ist NULL", SentryLevel.ERROR);
+            return;
+        }
+
+        User user = guild.getOwner().getUser();
+        if (!user.getName().isEmpty()) {
+            e.getInteraction().reply("Der Serverinhaber ist: " + e.getGuild().getOwner().getUser().getName()).queue();
+        } else {
+            Sentry.captureMessage("Owner Name ist NULL", SentryLevel.ERROR);
         }
     }
 }

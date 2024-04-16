@@ -21,30 +21,32 @@ public class Kick implements CommandInterface {
 
     @Override
     public void runSlashCommand(SlashCommandInteractionEvent e, DCBot dcBot) {
-        Member m = e.getMember();
-        if (m != null) {
-            if (m.hasPermission(Permission.KICK_MEMBERS) || m.hasPermission(Permission.ADMINISTRATOR)) {
-                Member member = e.getOption("user").getAsMember();
-                String reason = "";
-                if (e.getOption("reason") != null) {
-                    reason = e.getOption("reason").getAsString();
-                }
-                if (member != null) {
-                    if (!reason.isEmpty()) {
-                        member.kick().reason(reason).queue();
-                        e.getInteraction().reply("Der User " + member.getUser().getName() + " wurde erfolgreich gekickt!").queue();
-                    } else {
-                        member.kick().queue();
-                        e.getInteraction().reply("Der User " + member.getUser().getName() + " wurde erfolgreich gekickt!").queue();
-                    }
-                } else {
-                    Sentry.captureMessage("User ist NULL", SentryLevel.ERROR);
-                }
+        Member member = e.getMember();
+        if (member == null) {
+            e.reply("Ein fehler ist aufgetreten! Bitte versuche es später noch einmal!").queue();
+            Sentry.captureMessage("CMD User ist NULL", SentryLevel.ERROR);
+            return;
+        }
+        if (member.hasPermission(Permission.KICK_MEMBERS) || member.hasPermission(Permission.ADMINISTRATOR)) {
+            Member targetMember = e.getOption("user").getAsMember();
+            String reason = "";
+            if (e.getOption("reason") != null) {
+                reason = e.getOption("reason").getAsString();
+            }
+            if (targetMember == null) {
+                Sentry.captureMessage("User ist NULL", SentryLevel.ERROR);
+                e.reply("Der User konnte nicht gefunden werden!").queue();
+                return;
+            }
+            if (!reason.isEmpty()) {
+                targetMember.kick().reason(reason).queue();
+                e.getInteraction().reply("Der User " + targetMember.getUser().getName() + " wurde erfolgreich gekickt!").queue();
             } else {
-                e.getInteraction().reply("[ERROR]: Für den Command hast du nicht genügend Rechte").queue();
+                targetMember.kick().queue();
+                e.getInteraction().reply("Der User " + targetMember.getUser().getName() + " wurde erfolgreich gekickt!").queue();
             }
         } else {
-            Sentry.captureMessage("CMD User ist NULL", SentryLevel.ERROR);
+            e.getInteraction().reply("[ERROR]: Für den Command hast du nicht genügend Rechte").queue();
         }
     }
 }

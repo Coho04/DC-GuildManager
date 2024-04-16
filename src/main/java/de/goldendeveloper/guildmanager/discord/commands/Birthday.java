@@ -24,17 +24,19 @@ public class Birthday implements CommandInterface {
     public void runSlashCommand(SlashCommandInteractionEvent e, DCBot dcBot) {
         Member member = e.getMember();
         if (member != null) {
-            User u = e.getOption("user").getAsUser();
-            if (e.getOption("private").getAsBoolean()) {
-                u.openPrivateChannel().queue(msg -> {
-                    msg.sendMessage("Herzlichen Glückwunsch zum Geburtstag wünscht dir " + member.getUser().getName() + ". Viel Spaß dir heute!!!").queue();
-                });
-            } else {
-                e.getChannel().sendMessage(u.getAsMention() + "Herzlichen Glückwunsch zum Geburtstag wünscht dir " + member.getUser().getName() + ". Viel Spaß dir heute!!!").queue();
-            }
-            e.getInteraction().reply("Dem User wurde erfolgreich gratuliert!").queue();
-        } else {
+            e.reply("Ein fehler ist aufgetreten! Bitte versuche es später noch einmal!").queue();
             Sentry.captureMessage("CMD Member ist NULL", SentryLevel.ERROR);
+            return;
         }
+
+        User u = e.getOption("user").getAsUser();
+        if (e.getOption("private").getAsBoolean()) {
+            u.openPrivateChannel().queue(msg -> {
+                msg.sendMessage("Herzlichen Glückwunsch zum Geburtstag wünscht dir " + member.getUser().getName() + ". Viel Spaß dir heute!!!").queue();
+            });
+        } else {
+            e.getChannel().sendMessage(u.getAsMention() + "Herzlichen Glückwunsch zum Geburtstag wünscht dir " + member.getUser().getName() + ". Viel Spaß dir heute!!!").queue();
+        }
+        e.getInteraction().reply("Dem User wurde erfolgreich gratuliert!").queue();
     }
 }

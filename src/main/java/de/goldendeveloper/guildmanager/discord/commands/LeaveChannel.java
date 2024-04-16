@@ -20,20 +20,24 @@ public class LeaveChannel implements CommandInterface {
     @Override
     public void runSlashCommand(SlashCommandInteractionEvent e, DCBot dcBot) {
         Guild guild = e.getGuild();
-        if (e.getMember() != null && guild != null) {
-            GuildVoiceState voiceState = guild.getSelfMember().getVoiceState();
-            if (voiceState != null) {
-                if (voiceState.getChannel() != null && voiceState.inAudioChannel()) {
-                    e.getJDA().getDirectAudioController().disconnect(guild);
-                    e.getInteraction().reply("Ich habe erfolgreich deinen Channel verlassen!").queue();
-                } else {
-                    Sentry.captureMessage("Du bist in keinem VoiceChannel!", SentryLevel.ERROR);
-                }
-            } else {
-                Sentry.captureMessage("VoiceState is NULL", SentryLevel.ERROR);
-            }
-        } else {
+        if (e.getMember() == null || guild == null) {
+            e.reply("Ein fehler ist aufgetreten! Bitte versuche es später noch einmal!").queue();
             Sentry.captureMessage("Benutzer is NULL", SentryLevel.ERROR);
+            return;
+        }
+
+        GuildVoiceState voiceState = guild.getSelfMember().getVoiceState();
+        if (voiceState == null) {
+            e.reply("Ein fehler ist aufgetreten! Bitte versuche es später noch einmal!").queue();
+            Sentry.captureMessage("VoiceState is NULL", SentryLevel.ERROR);
+            return;
+        }
+
+        if (voiceState.getChannel() != null && voiceState.inAudioChannel()) {
+            e.getJDA().getDirectAudioController().disconnect(guild);
+            e.getInteraction().reply("Ich habe erfolgreich deinen Channel verlassen!").queue();
+        } else {
+            e.reply("Du bist in keinem VoiceChannel").queue();
         }
     }
 }

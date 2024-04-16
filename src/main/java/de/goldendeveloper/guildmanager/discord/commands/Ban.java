@@ -21,40 +21,43 @@ public class Ban implements CommandInterface {
 
     @Override
     public CommandData commandData() {
-        return Commands.slash("ban",  "Bannt einen definierten Benutzer").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.INTEGER, "time", "Gib die Ban Dauer in Tagen an um den User zu bannen", true, true).addOption(OptionType.STRING, "reason", "Begründe deinen Ban", true);
+        return Commands.slash("ban", "Bannt einen definierten Benutzer").addOption(OptionType.USER, "user", "Füge einen Benutzer hinzu", true).addOption(OptionType.INTEGER, "time", "Gib die Ban Dauer in Tagen an um den User zu bannen", true, true).addOption(OptionType.STRING, "reason", "Begründe deinen Ban", true);
     }
 
     @Override
     public void runSlashCommand(SlashCommandInteractionEvent e, DCBot dcBot) {
-        Member m = e.getMember();
-        if (m != null) {
-            if (m.hasPermission(Permission.BAN_MEMBERS) || m.hasPermission(Permission.ADMINISTRATOR)) {
-                Member member = e.getOption(optionUser).getAsMember();
-                if (e.getOption(optionTime) != null) {
-                    int time = e.getOption(optionTime).getAsInt();
-                    String reason = "";
-                    if (e.getOption(optionReason) != null) {
-                        reason = e.getOption(optionReason).getAsString();
-                    }
-                    if (member != null) {
-                        if (!reason.isEmpty()) {
-                            member.ban(time, TimeUnit.MINUTES).reason(reason).queue();
-                            e.getInteraction().reply("Der User " + member.getUser().getName() + " wurde erfolgreich gebannt!").queue();
-                        } else {
-                            member.ban(time, TimeUnit.MINUTES).queue();
-                            e.getInteraction().reply("Der User " + member.getUser().getName() + " wurde erfolgreich gebannt!").queue();
-                        }
-                    } else {
-                        Sentry.captureMessage("User ist NULL", SentryLevel.ERROR);
-                    }
-                } else {
-                    Sentry.captureMessage("Zeit ist NULL", SentryLevel.ERROR);
-                }
-            } else {
-                e.getInteraction().reply("[ERROR]: Für den Command hast du nicht genügend Rechte").queue();
-            }
-        } else {
+        Member member = e.getMember();
+        if (member == null) {
             Sentry.captureMessage("CMD User ist NULL", SentryLevel.ERROR);
+            return;
+        }
+
+        if (!member.hasPermission(Permission.BAN_MEMBERS) && !member.hasPermission(Permission.ADMINISTRATOR)) {
+            e.getInteraction().reply("[ERROR]: Für den Command hast du nicht genügend Rechte").queue();
+            return;
+        }
+        Member targetMember = e.getOption(optionUser).getAsMember();
+        if (e.getOption(optionTime) == null) {
+            Sentry.captureMessage("Zeit ist NULL", SentryLevel.ERROR);
+            return;
+        }
+
+        int time = e.getOption(optionTime).getAsInt();
+        String reason = "";
+        if (e.getOption(optionReason) != null) {
+            reason = e.getOption(optionReason).getAsString();
+        }
+        if (targetMember == null) {
+            Sentry.captureMessage("User ist NULL", SentryLevel.ERROR);
+            return;
+        }
+
+        if (!reason.isEmpty()) {
+            targetMember.ban(time, TimeUnit.MINUTES).reason(reason).queue();
+            e.getInteraction().reply("Der User " + targetMember.getUser().getName() + " wurde erfolgreich gebannt!").queue();
+        } else {
+            targetMember.ban(time, TimeUnit.MINUTES).queue();
+            e.getInteraction().reply("Der User " + targetMember.getUser().getName() + " wurde erfolgreich gebannt!").queue();
         }
     }
 }
