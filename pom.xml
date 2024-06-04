@@ -92,10 +92,6 @@
             <id>Golden-Developer</id>
             <url>https://nexus.golden-developer.de/repository/maven-public/</url>
         </repository>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
     </repositories>
 
     <dependencies>
