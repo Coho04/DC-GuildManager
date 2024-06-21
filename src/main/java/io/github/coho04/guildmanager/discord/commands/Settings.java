@@ -1,6 +1,6 @@
-package de.goldendeveloper.guildmanager.discord.commands;
+package io.github.coho04.guildmanager.discord.commands;
 
-import de.goldendeveloper.guildmanager.Main;
+import io.github.coho04.guildmanager.Main;
 import io.github.coho04.dcbcore.DCBot;
 import io.github.coho04.dcbcore.interfaces.CommandInterface;
 import io.sentry.Sentry;

@@ -1,4 +1,4 @@
-package de.goldendeveloper.guildmanager;
+package io.github.coho04.guildmanager;
 
 import io.github.coho04.dcbcore.Config;
 

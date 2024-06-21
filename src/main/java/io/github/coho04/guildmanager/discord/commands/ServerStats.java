@@ -1,6 +1,6 @@
-package de.goldendeveloper.guildmanager.discord.commands;
+package io.github.coho04.guildmanager.discord.commands;
 
-import de.goldendeveloper.guildmanager.Main;
+import io.github.coho04.guildmanager.Main;
 import io.github.coho04.dcbcore.DCBot;
 import io.github.coho04.dcbcore.interfaces.CommandInterface;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -21,7 +21,7 @@ public class ServerStats implements CommandInterface {
     public void runSlashCommand(SlashCommandInteractionEvent e, DCBot dcBot) {
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setTitle("**Server Stats**");
-        embedBuilder.setFooter("@Golden-Developer", e.getJDA().getSelfUser().getAvatarUrl());
+        embedBuilder.setFooter("@GuildManager", e.getJDA().getSelfUser().getAvatarUrl());
         embedBuilder.setColor(Color.MAGENTA);
         embedBuilder.addField("Alle Users", String.valueOf(e.getGuild().getMembers().size()), true);
         embedBuilder.addField("Online Users", String.valueOf(Main.getOnlineUsers(e.getGuild())), true);

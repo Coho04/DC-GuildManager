@@ -1,4 +1,4 @@
-package de.goldendeveloper.guildmanager.discord.commands;
+package io.github.coho04.guildmanager.discord.commands;
 
 import io.github.coho04.dcbcore.DCBot;
 import io.github.coho04.dcbcore.interfaces.CommandInterface;

@@ -1,4 +1,4 @@
-package de.goldendeveloper.guildmanager;
+package io.github.coho04.guildmanager;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

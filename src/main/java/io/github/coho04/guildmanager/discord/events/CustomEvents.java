@@ -1,6 +1,6 @@
-package de.goldendeveloper.guildmanager.discord.events;
+package io.github.coho04.guildmanager.discord.events;
 
-import de.goldendeveloper.guildmanager.Main;
+import io.github.coho04.guildmanager.Main;
 import io.sentry.Sentry;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -46,7 +46,7 @@ public class CustomEvents extends ListenerAdapter {
                         emb.setDescription("Willkommen **" + user.getName() + "**,\n" + " auf dem **" + serverName + "** Discord Server!");
                         emb.setTimestamp(new Date().toInstant());
                         emb.setThumbnail(user.getAvatarUrl());
-                        emb.setFooter("@Golden-Developer");
+                        emb.setFooter("@GuildManager");
                         textChannel.sendMessageEmbeds(emb.build()).queue();
                     } else {
                         Member owner = e.getGuild().getOwner();
@@ -57,7 +57,7 @@ public class CustomEvents extends ListenerAdapter {
                                 em.setTitle("**ERROR**");
                                 em.setDescription("Der angegebene Willkommens Channel konnte auf **" + e.getGuild().getName() + "** nicht gefunden werden!");
                                 em.setTimestamp(new Date().toInstant());
-                                em.setFooter("@Golden-Developer");
+                                em.setFooter("@GuildManager");
                                 channel.sendMessageEmbeds(em.build()).queue();
                             });
                         }
@@ -75,7 +75,7 @@ public class CustomEvents extends ListenerAdapter {
                                 em.setTitle("**ERROR**");
                                 em.setDescription("Die angegebene Join Rolle konnte auf **" + e.getGuild().getName() + "** nicht gefunden oder nicht mit ihr Interagiert werden werden!");
                                 em.setTimestamp(new Date().toInstant());
-                                em.setFooter("@Golden-Developer");
+                                em.setFooter("@GuildManager");
                                 channel.sendMessageEmbeds(em.build()).queue();
                             });
                         }

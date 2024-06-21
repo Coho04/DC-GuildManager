@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.goldendeveloper</groupId>
-    <artifactId>GD-GuildManager</artifactId>
+    <groupId>io.github.coho04</groupId>
+    <artifactId>DC-GuildManager</artifactId>
     <version>1.0</version>
 
     <properties>
@@ -71,7 +71,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>de.goldendeveloper.guildmanager.Main</mainClass>
+                            <mainClass>io.github.coho04.guildmanager.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -93,7 +93,6 @@
             <artifactId>DCB-Core</artifactId>
             <version>1.9.4</version>
         </dependency>
-
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>

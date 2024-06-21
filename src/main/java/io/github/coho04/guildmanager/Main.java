@@ -1,7 +1,7 @@
-package de.goldendeveloper.guildmanager;
+package io.github.coho04.guildmanager;
 
-import de.goldendeveloper.guildmanager.discord.commands.*;
-import de.goldendeveloper.guildmanager.discord.events.CustomEvents;
+import io.github.coho04.guildmanager.discord.commands.*;
+import io.github.coho04.guildmanager.discord.events.CustomEvents;
 import io.github.coho04.dcbcore.DCBotBuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Guild;
