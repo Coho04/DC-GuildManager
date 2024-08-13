@@ -30,7 +30,7 @@ public class CustomEvents extends ListenerAdapter {
         try (Connection connection = Main.getMysql().getSource().getConnection()) {
             String selectQuery = "SELECT * FROM settings WHERE guild_id = ?;";
             PreparedStatement statement = connection.prepareStatement(selectQuery);
-            statement.execute("USE `GD-GuildManager`");
+            statement.execute("USE `guild_manager_db`");
             statement.setString(1, e.getGuild().getId());
             try (ResultSet rs = statement.executeQuery()) {
                 if (rs.next()) {
@@ -93,7 +93,7 @@ public class CustomEvents extends ListenerAdapter {
         try (Connection connection = Main.getMysql().getSource().getConnection()) {
             String selectQuery = "SELECT count(*) FROM settings WHERE guild_id = ?;";
             PreparedStatement statement = connection.prepareStatement(selectQuery);
-            statement.execute("USE `GD-GuildManager`");
+            statement.execute("USE `guild_manager_db`");
             statement.setLong(1, Objects.requireNonNull(event.getGuild()).getIdLong());
             try (ResultSet rs = statement.executeQuery()) {
                 if (rs.next()) {
@@ -103,7 +103,7 @@ public class CustomEvents extends ListenerAdapter {
                         if (option.getValue().equalsIgnoreCase("join-role")) {
                             if (join_role >= 1) {
                                 PreparedStatement updateQuery = connection.prepareStatement("UPDATE settings SET join_role = ? where guild_id = ?  ");
-                                updateQuery.execute("USE `GD-GuildManager`");
+                                updateQuery.execute("USE `guild_manager_db`");
                                 updateQuery.setObject(1, null);
                                 updateQuery.setLong(1, event.getGuild().getIdLong());
                                 updateQuery.execute();
@@ -114,7 +114,7 @@ public class CustomEvents extends ListenerAdapter {
                         } else if (option.getValue().equalsIgnoreCase("welcome-message")) {
                             if (welcome_channel >= 1) {
                                 PreparedStatement updateQuery = connection.prepareStatement("UPDATE settings SET welcome_channel = ? where guild_id = ?  ");
-                                updateQuery.execute("USE `GD-GuildManager`");
+                                updateQuery.execute("USE `guild_manager_db`");
                                 updateQuery.setObject(1, null);
                                 updateQuery.setLong(1, event.getGuild().getIdLong());
                                 updateQuery.execute();

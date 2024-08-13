@@ -37,13 +37,14 @@ jobs:
             **/generated-sources/**
             **/maven-archiver/**
             **/maven-status/**
-
-      - name: ls -a via ssh
+      - name: SSH into server and rebuild Docker container
         uses: fifsky/ssh-action@master
         with:
           command: |
-            cd '${{ secrets.SERVER_DIR }}'
-            ./start.sh
+            cd ${{ secrets.SERVER_DIR }} && cd ../
+            docker compose down gd_guild_manager
+            docker compose build --no-cache gd_guild_manager
+            docker compose up -d gd_guild_manager
           host: ${{ secrets.HOST }}
           port: 22
           user: ${{ secrets.USERNAME }}
