@@ -8,7 +8,7 @@
     <version>1.0</version>
 
     <properties>
-        <java.version>${java.version}</java.version>
+        <java.version>20</java.version>
         <project.source.encoding>UTF-8</project.source.encoding>
         <project.target.encoding>UTF-8</project.target.encoding>
     </properties>
