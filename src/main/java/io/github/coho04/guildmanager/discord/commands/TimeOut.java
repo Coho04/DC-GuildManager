@@ -45,7 +45,7 @@ public class TimeOut implements CommandInterface {
                 targetMember.timeoutFor(time, TimeUnit.MINUTES).queue();
                 e.getInteraction().reply("Der User " + targetMember.getUser().getName() + " hat erfolgreich einen timeout bekommen!").queue();
             } else {
-                e.reply("Ein fehler ist aufgetreten! Bitte versuche es später noch einmal!").queue();
+                e.reply("Ein Fehler ist aufgetreten! Bitte versuche es später noch einmal!").queue();
                 Sentry.captureMessage("Timeout Dauer is 0", SentryLevel.ERROR);
             }
         } else {

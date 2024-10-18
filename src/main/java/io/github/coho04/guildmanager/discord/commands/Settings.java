@@ -38,21 +38,21 @@ public class Settings implements CommandInterface {
                 try (Connection connection = Main.getMysql().getSource().getConnection()) {
                     String selectQuery = "SELECT count(*) FROM settings WHERE guild_id = ?;";
                     PreparedStatement statement = connection.prepareStatement(selectQuery);
-                    statement.execute("USE `guild_manager_db`");
+                    statement.execute("USE `" + Main.getCustomConfig().getMysqlDatabase() + "`");
                     statement.setLong(1, e.getGuild().getIdLong());
                     Role role = Objects.requireNonNull(e.getOption(settingsSupJoinRoleOptionRole)).getAsRole();
                     try (ResultSet rs = statement.executeQuery()) {
                         if (rs.next()) {
                             String updateQuery = "UPDATE settings SET join_role = ? where guild_id = ?;";
                             PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
-                            updateStatement.execute("USE `guild_manager_db`");
+                            updateStatement.execute("USE `" + Main.getCustomConfig().getMysqlDatabase() + "`");
                             updateStatement.setLong(1, role.getIdLong());
                             updateStatement.setLong(2, e.getGuild().getIdLong());
                             e.getInteraction().reply("Die Rolle fürs joinen wurde erfolgreich gesetzt!").queue();
                         } else {
                             String insertQuery = "INSERT INTO settings(guild_id, welcome_channel, join_role) VALUES (?, ?, ?);";
                             PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
-                            insertStatement.execute("USE `guild_manager_db`");
+                            insertStatement.execute("USE `" + Main.getCustomConfig().getMysqlDatabase() + "`");
                             insertStatement.setLong(1, e.getGuild().getIdLong());
                             insertStatement.setObject(2, null);
                             insertStatement.setLong(3, role.getIdLong());
@@ -69,21 +69,21 @@ public class Settings implements CommandInterface {
                 try (Connection connection = Main.getMysql().getSource().getConnection()) {
                     String selectQuery = "SELECT count(*) FROM settings WHERE guild_id = ?;";
                     PreparedStatement statement = connection.prepareStatement(selectQuery);
-                    statement.execute("USE `guild_manager_db`");
+                    statement.execute("USE `" + Main.getCustomConfig().getMysqlDatabase() + "`");
                     statement.setString(1, e.getGuild().getId());
                     TextChannel channel = e.getOption(settingsSupWMessageOptionChannel).getAsChannel().asTextChannel();
                     try (ResultSet rs = statement.executeQuery()) {
                         if (rs.next()) {
                             String updateQuery = "UPDATE settings SET welcome_channel = ? where guild_id = ?;";
                             PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
-                            updateStatement.execute("USE `guild_manager_db`");
+                            updateStatement.execute("USE `" + Main.getCustomConfig().getMysqlDatabase() + "`");
                             updateStatement.setLong(1, channel.getIdLong());
                             updateStatement.setLong(2, e.getGuild().getIdLong());
                             e.getHook().sendMessage("Der Channel für die Willkommens Nachricht wurde erfolgreich gesetzt!").queue();
                         } else {
                             String insertQuery = "INSERT INTO settings(guild_id, welcome_channel, join_role) VALUES (?, ?, ?);";
                             PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
-                            insertStatement.execute("USE `guild_manager_db`");
+                            insertStatement.execute("USE `" + Main.getCustomConfig().getMysqlDatabase() + "`");
                             insertStatement.setLong(1, e.getGuild().getIdLong());
                             insertStatement.setLong(2, channel.getIdLong());
                             insertStatement.setObject(3, null);

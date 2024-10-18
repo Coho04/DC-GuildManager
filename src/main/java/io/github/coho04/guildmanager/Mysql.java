@@ -17,8 +17,8 @@ public class Mysql {
         this.source = getConfig();
         try {
             Statement statement = this.source.getConnection().createStatement();
-            statement.execute("CREATE DATABASE IF NOT EXISTS `guild_manager_db`;");
-            statement.execute("USE `guild_manager_db`;");
+            statement.execute("CREATE DATABASE IF NOT EXISTS `" + Main.getCustomConfig().getMysqlDatabase() +"`;");
+            statement.execute("USE `" + Main.getCustomConfig().getMysqlDatabase() + "`;");
             statement.execute("CREATE TABLE IF NOT EXISTS settings (id INT AUTO_INCREMENT NOT NULL PRIMARY KEY, guild_id LONG NOT NULL, welcome_channel LONG NULL, join_role LONG NULL);");
             statement.close();
         } catch (SQLException exception) {
