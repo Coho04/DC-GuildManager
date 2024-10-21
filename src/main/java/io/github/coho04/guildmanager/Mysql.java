@@ -3,7 +3,6 @@ package io.github.coho04.guildmanager;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.sentry.Sentry;
-import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -28,7 +27,7 @@ public class Mysql {
         System.out.println("[MYSQL] Initialized MySQL!");
     }
 
-    private static @NotNull HikariDataSource getConfig() {
+    private static HikariDataSource getConfig() {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:mysql://" + Main.getCustomConfig().getMysqlHostname() + ":" + Main.getCustomConfig().getMysqlPort());
         config.setMinimumIdle(5);

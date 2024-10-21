@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionE
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
-import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
 import java.sql.Connection;
@@ -26,7 +25,7 @@ import java.util.Objects;
 public class CustomEvents extends ListenerAdapter {
 
     @Override
-    public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent e) {
+    public void onGuildMemberJoin(GuildMemberJoinEvent e) {
         try (Connection connection = Main.getMysql().getSource().getConnection()) {
             String selectQuery = "SELECT * FROM settings WHERE guild_id = ?;";
             PreparedStatement statement = connection.prepareStatement(selectQuery);
@@ -89,7 +88,7 @@ public class CustomEvents extends ListenerAdapter {
     }
 
     @Override
-    public void onStringSelectInteraction(@NotNull StringSelectInteractionEvent event) {
+    public void onStringSelectInteraction(StringSelectInteractionEvent event) {
         try (Connection connection = Main.getMysql().getSource().getConnection()) {
             String selectQuery = "SELECT count(*) FROM settings WHERE guild_id = ?;";
             PreparedStatement statement = connection.prepareStatement(selectQuery);
@@ -133,7 +132,7 @@ public class CustomEvents extends ListenerAdapter {
     }
 
     @Override
-    public void onCommandAutoCompleteInteraction(@NotNull CommandAutoCompleteInteractionEvent e) {
+    public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent e) {
         try {
             String cmd = e.getName();
             if (cmd.equalsIgnoreCase("ban")) {
