@@ -18,6 +18,7 @@ public class Main {
         dcBotBuilder.registerEvents(new CustomEvents());
         dcBotBuilder.build();
         mysql = new Mysql();
+        System.out.println("Java application started successfully");
     }
 
     public static Mysql getMysql() {
